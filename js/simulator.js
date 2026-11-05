@@ -135,11 +135,10 @@ document.getElementById("to-committee").addEventListener("click", function(){
 
 document.getElementById("to-verdict").addEventListener("click", function(){
   var s = STOCKS[cur], score = 0, max = 10, fb = [];
-  /* 1. keputusan (3) */
-  var dScore = 0;
-  if(decision === s.key.decision) dScore = 3;
-  else if(cur==="B" && decision==="buy") dScore = 1;
-  else if(cur==="C" && decision==="hold") dScore = 1;
+  /* 1. keputusan (3) — keputusan salah = 0, tanpa partial credit (fix 2026-11-05:
+     pola Credit Desk: keputusan salah = gagal; di sini gerbang eksplisit di bawah
+     karena max tetap 10 sehingga 7/10 tanpa keputusan benar tetap lolos) */
+  var dScore = (decision === s.key.decision) ? 3 : 0;
   score += dScore;
   var dLabel = {buy:"BUY",hold:"HOLD",pass:"PASS"}[decision];
   var kLabel = {buy:"BUY",hold:"HOLD",pass:"PASS"}[s.key.decision];
@@ -172,9 +171,13 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   var iScore = iOk ? 2 : 0;
   score += iScore;
   fb.push("<b>Invalidasi ("+iScore+"/2):</b> "+(iOk?"✓":"✗")+" — "+iq.why);
-  var verdict = score>=7 ? "LULUS" : "BELUM LULUS";
+  /* Gerbang keputusan: LULUS wajib skor ≥7 DAN keputusan benar. Tanpa gerbang ini,
+     keputusan salah + sisa sempurna = 7/10 tetap lolos (review Instinct 2026-11-05). */
+  var decOk = (decision === s.key.decision);
+  var verdict = (score>=7 && decOk) ? "LULUS" : "BELUM LULUS";
   var cls = verdict==="LULUS" ? "ok" : "bad";
-  document.getElementById("verdict-box").innerHTML = '<div class="id-result show '+cls+'"><b>Skor: '+score+'/'+max+' — '+verdict+'</b></div>'
+  var decNote = decOk ? "" : "<br><b>Keputusan salah — LULUS wajib keputusan benar.</b>";
+  document.getElementById("verdict-box").innerHTML = '<div class="id-result show '+cls+'"><b>Skor: '+score+'/'+max+' — '+verdict+'</b>'+decNote+'</div>'
     + '<div class="id-kunci"><b>Kunci komite — '+s.name+':</b><br>• '+fb.join('<br><br>• ')+'</div>';
   idSave("sim_"+cur, {score:score, max:max, decision:decision});
   show("step-verdict");
