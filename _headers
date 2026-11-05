@@ -1,0 +1,13 @@
+# Investment Desk — security headers (Cloudflare Pages).
+# Pola Credit Desk: script-src 'self' TANPA 'unsafe-inline' (tidak ada
+# script inline / event handler inline / javascript: URL di situs ini).
+# style-src 'self' 'unsafe-inline': atribut style="..." dipakai di beberapa
+# halaman (progressive disclosure cards).
+# Tidak ada fetch/API luar, iframe, atau gambar eksternal.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains

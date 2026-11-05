@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investment Committee Simulator · Investment Desk</title>
+<meta name="description" content="Simulator komite investasi flagship: pitch 1 saham, isi thesis, hadapi bear challenges komite, terima vonis BUY/HOLD/PASS.">
+<link rel="canonical" href="https://investment-desk.pages.dev/simulator/">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<nav class="id-nav">
+  <a href="../" class="brandmark"><span class="desk-badge">INVESTMENT DESK</span></a>
+  <span class="mantra">Thesis. Valuasi. Kesabaran.</span>
+</nav>
+<div class="id-wrap">
+  <div class="id-hero">
+    <h1>Investment Committee Simulator</h1>
+    <p class="tag">Flagship — putuskan seperti pemilik bisnis.</p>
+    <p>Anda analis ekuitas. Tiga emiten masuk ke meja komite hari ini.
+    Baca paketnya, tulis <b>thesis 1 halaman</b> (target price + bull case + risiko + keputusan),
+    lalu hadapi <b>bear challenges</b> dari komite. Komite tidak membeli narasi —
+    mereka membeli selisih antara harga dan nilai yang bisa dipertahankan angka.
+    <span class="id-mantra">Thesis. Valuasi. Kesabaran.</span></p>
+  </div>
+
+  <div class="id-card" id="step-stock">
+    <h2>Langkah 1 — Pilih emiten</h2>
+    <p class="id-sub">Selesaikan satu per satu. Skor tersimpan per emiten.</p>
+    <div class="ilus">ILUSTRATIF — SEMUA EMITEN FIKTIF, ANGKA UNTUK LATIHAN</div>
+    <div class="id-grid" id="stock-cards"></div>
+  </div>
+
+  <div class="id-card" id="step-package" style="display:none">
+    <h2>Langkah 2 — Paket emiten: <span id="pkg-name"></span></h2>
+    <div class="ilus">ILUSTRATIF — ANGKA FIKTIF</div>
+    <div class="tblwrap"><table class="id-tbl" id="pkg-tbl"></table></div>
+    <h3>Informasi kualitatif</h3>
+    <ul id="pkg-qual" style="font-size:.9rem"></ul>
+    <div class="id-btnrow"><button class="id-btn" id="to-thesis">Tulis thesis →</button></div>
+  </div>
+
+  <div class="id-card" id="step-thesis" style="display:none">
+    <h2>Langkah 3 — Thesis Anda (1 halaman)</h2>
+    <p class="id-sub">Thesis tanpa angka yang bisa salah = opini. Tulis yang bisa diuji komite.</p>
+    <div class="id-grid">
+      <div class="id-field"><label>Target price (Rp)</label>
+        <input id="t-target" inputmode="decimal" placeholder="mis. 2.000">
+        <div class="id-hint">Dari metode valuasimu (I2). Harus bisa direplikasi.</div></div>
+      <div class="id-field"><label>Metode valuasi</label>
+        <select id="t-method"><option value="">— pilih —</option>
+          <option value="dcf">DCF (FCFF)</option>
+          <option value="ddm">DDM / Residual income</option>
+          <option value="mult">Multiples</option></select>
+        <div class="id-hint">Metode mengikuti emiten (I2).</div></div>
+    </div>
+    <div class="id-field" style="margin-top:.8rem"><label>Bull case (2–3 poin, masing-masing dengan angka)</label>
+      <textarea id="t-bull" placeholder="mis. Pangsa pasar 18%→22% dalam 3 tahun, didorong…"></textarea></div>
+    <div class="id-field" style="margin-top:.8rem"><label>Risiko utama + dampak ke target</label>
+      <textarea id="t-risk" placeholder="mis. Daya beli turun 10% → target turun ke Rp…"></textarea></div>
+    <div class="id-field" style="margin-top:.8rem"><label>Keputusan</label>
+      <div class="id-btnrow" id="pitch-btns">
+        <button class="id-opt" data-dec="buy" style="width:auto;flex:1;min-width:9rem">✅ BUY</button>
+        <button class="id-opt" data-dec="hold" style="width:auto;flex:1;min-width:9rem">⏸️ HOLD</button>
+        <button class="id-opt" data-dec="pass" style="width:auto;flex:1;min-width:9rem">❌ PASS</button>
+      </div></div>
+    <div class="id-btnrow"><button class="id-btn" id="to-committee">Hadapi komite →</button></div>
+  </div>
+
+  <div class="id-card" id="step-committee" style="display:none">
+    <h2>Langkah 4 — Bear challenges komite</h2>
+    <p class="id-sub">Komite menyerang thesis-mu. Format Indonesia: desimal pakai koma (36,1); ribuan ketik tanpa titik (2500) atau pakai ,00 (2.500,00). Pertanyaan terakhir = invalidasi.</p>
+    <div id="comm-qs"></div>
+    <div class="id-btnrow"><button class="id-btn apricot" id="to-verdict">Minta vonis komite</button></div>
+  </div>
+
+  <div class="id-card" id="step-verdict" style="display:none">
+    <h2>Langkah 5 — Vonis komite</h2>
+    <div id="verdict-box"></div>
+    <div class="id-btnrow">
+      <button class="id-btn ghost" id="again">⟲ Ulangi emiten ini</button>
+      <button class="id-btn" id="next-stock">Emiten berikutnya →</button>
+    </div>
+  </div>
+
+  <div class="id-pager"><a href="../i1/">→ I1 Thesis</a><a href="../i2/">→ I2 Valuasi</a></div>
+  <div class="id-foot" style="margin-top:0">Investment Desk · <i>"Harga adalah opini. Nilai adalah pekerjaan rumah."</i> · Semua emiten &amp; angka di halaman ini fiktif untuk latihan.</div>
+</div>
+<script src="/js/common.js"></script>
+<script src="/js/simulator.js"></script>
+</body>
+</html>

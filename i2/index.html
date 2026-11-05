@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I2 · Toolbox Valuasi · Investment Desk</title>
+<meta name="description" content="I2 Investment Desk: metode valuasi mengikuti emiten — DCF, DDM, multiples — dan margin of safety yang jujur.">
+<link rel="canonical" href="https://investment-desk.pages.dev/i2/">
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav class="id-nav">
+  <a href="/">← Investment Desk</a>
+  <span class="mantra">Thesis. Valuasi. Kesabaran.</span>
+</nav>
+
+<header class="id-hero">
+  <p class="kicker">I2 · Toolbox</p>
+  <h1>Valuasi: Metode <em>Mengikuti Emiten.</em></h1>
+  <p class="lede">Kesalahan valuasi paling mahal bukan salah hitung — <strong>salah pilih metode</strong>. DCF untuk bank sama kelirunya dengan P/E untuk perusahaan tanpa laba.</p>
+</header>
+
+<main class="wrap">
+
+<section class="id-sec">
+  <div class="prereq">
+    <h3>Prasyarat &amp; rujukan</h3>
+    <ul>
+      <li><strong>Wajib:</strong> <a href="https://fmva-sprint.pages.dev/">FMVA Sprint</a> Hari 08–15 — DCF diajarkan penuh di sana (tidak diulang di sini).</li>
+      <li><strong>Studi kasus:</strong> FMVA Real Cases — UNVR (DCF), ASII (SOTP), TSLA (reverse-DCF), BBCA (valuasi bank).</li>
+      <li><strong>Angka bank:</strong> <a href="https://fsa-lab.pages.dev/modul-30/">FSA Lab M30</a> — rasio bank.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="id-sec">
+  <h2>1 · Decision tree: metode apa untuk emiten apa</h2>
+  <div class="tblwrap"><table class="stmt">
+    <thead><tr><th>Jenis emiten</th><th>Metode utama</th><th>Kenapa</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Non-bank, arus kas stabil</strong></td><td>DCF (FCFF)</td><td>Nilai = kas yang bisa diambil pemilik di masa depan, didiskon</td></tr>
+      <tr><td><strong>Bank / finansial</strong></td><td>DDM / residual income / P-BV</td><td>DCF tidak cocok untuk bank — utang adalah bahan baku, bukan beban</td></tr>
+      <tr><td><strong>Konglomerat multi-segmen</strong></td><td>SOTP (sum-of-the-parts)</td><td>Tiap segmen punya risiko &amp; kelipatan berbeda — satu DCF menutupi itu</td></tr>
+      <tr><td><strong>Siklikal (komoditas, properti)</strong></td><td>Mid-cycle earnings × multiple normal</td><td>DCF di puncak siklus = membeli puncak; pakai laba tengah-siklus</td></tr>
+      <tr><td><strong>Growth tanpa laba</strong></td><td>Reverse-DCF</td><td>Balik pertanyaannya: pertumbuhan berapa yang SUDAH dihargai pasar? Masuk akal tidak?</td></tr>
+      <tr><td><strong>Distress / ekuitas hampir nol</strong></td><td>Jangan (atau liquidation value)</td><td>Bukan wilayah analis ekuitas — ini meja kredit/workout</td></tr>
+    </tbody>
+  </table></div>
+  <p>Multiples (P/E, EV/EBITDA) adalah <strong>pembanding</strong>, bukan metode utama — ia menjawab "murah relatif terhadap apa", bukan "berapa nilainya". Selalu pasangkan dengan satu metode absolut.</p>
+</section>
+
+<section class="id-sec">
+  <h2>2 · Margin of safety yang jujur</h2>
+  <p>Margin of safety (MOS) bukan angka magis 30%. Ia adalah <strong>fungsi ketidakpastian</strong>:</p>
+  <ul>
+    <li><strong>Bisnis stabil, kas terprediksi</strong> (consumer staples): MOS 15–20% cukup — yang tidak pasti hanya harga, bukan nilai.</li>
+    <li><strong>Bisnis siklikal</strong> (komoditas, properti): MOS 30–40% — nilai sendiri bergerak mengikuti siklus.</li>
+    <li><strong>Thesis bergantung satu asumsi</strong> (satu kontrak, satu regulasi): MOS 40%+ atau jangan beli — kamu bertaruh, bukan berinvestasi.</li>
+  </ul>
+  <div class="honest"><strong>Uji jujur:</strong> tulis SATU kalimat — "saya butuh asumsi X benar agar target tercapai; kalau X salah 20%, target saya jadi RpY." Kalau Y di bawah harga pasar, MOS-mu ilusi.</div>
+</section>
+
+<section class="id-sec">
+  <h2>3 · Kapan multiples menipu (value trap)</h2>
+  <p>Tiga pola "terlihat murah" yang paling sering menjebak:</p>
+  <ol>
+    <li><strong>P/E rendah + laba tidak jadi kas.</strong> Cek CFO vs laba 3 tahun. Laba tanpa kas = laba kertas (lensa forensik I1).</li>
+    <li><strong>P/BV &lt; 1 pada bisnis yang menghancurkan modal.</strong> Murah vs nilai buku tidak berarti apa-apa bila ROE &lt; cost of equity bertahun-tahun — bukunya menyusut.</li>
+    <li><strong>EV/EBITDA rendah di puncak siklus.</strong> EBITDA puncak membuat kelipatan terlihat murah tepat sebelum jatuh — pakai mid-cycle.</li>
+  </ol>
+  <p>Aturan praktis: <strong>multiples untuk screening, DCF/DDM untuk keputusan.</strong> Tidak ada yang beli saham hanya karena "P/E-nya 8x".</p>
+</section>
+
+<section class="id-sec">
+  <h2>4 · Lembar valuasi 1 emiten (contoh ilustratif)</h2>
+  <p><span class="ilus" style="display:inline-block">ILUSTRATIF — EMITEN FIKTIF</span></p>
+  <div class="tblwrap"><table class="stmt">
+    <thead><tr><th>Pos</th><th class="num">Nilai</th><th>Catatan</th></tr></thead>
+    <tbody>
+      <tr><td>FCFF</td><td class="num">Rp150 M</td><td>Dari model (diajarkan di FMVA H08–H15)</td></tr>
+      <tr><td>g / WACC</td><td class="num">3% / 10%</td><td>g &lt; pertumbuhan ekonomi jangka panjang</td></tr>
+      <tr><td>Enterprise value</td><td class="num">Rp2.207 M</td><td>150 × 1,03 ÷ (0,10 − 0,03)</td></tr>
+      <tr><td>(−) Net debt</td><td class="num">Rp400 M</td><td>Utang 900 − kas 500</td></tr>
+      <tr><td>Equity value</td><td class="num">Rp1.807 M</td><td></td></tr>
+      <tr><td>(÷) Saham beredar</td><td class="num">978 jt</td><td>Diluted</td></tr>
+      <tr><td><strong>Target price</strong></td><td class="num"><strong>Rp1.850</strong></td><td></td></tr>
+      <tr><td>Harga pasar</td><td class="num">Rp1.500</td><td></td></tr>
+      <tr><td><strong>Upside</strong></td><td class="num"><strong>23%</strong></td><td>MOS memadai untuk ritel stabil</td></tr>
+    </tbody>
+  </table></div>
+  <p>Lembar seperti ini — satu tabel, semua asumsi terlihat — adalah yang kamu bawa ke <a href="/simulator/">simulator komite</a>.</p>
+</section>
+
+<section class="id-sec">
+  <h2>Quiz — gate 80%</h2>
+  <div id="quiz-wrap"></div>
+  <div class="btnrow"><button class="btn" id="quiz-submit">Kumpulkan jawaban</button></div>
+  <div id="gate-box"></div>
+</section>
+
+</main>
+
+<footer class="id-foot">
+  <div class="wrap">
+    <div><strong style="color:#fff">Investment Desk</strong><br>
+    <span style="color:var(--apricot)">Thesis. Valuasi. Kesabaran.</span></div>
+    <div><a href="/i1/">← I1</a> · <a href="/">Beranda</a> · <a href="/i3/">I3 →</a></div>
+  </div>
+</footer>
+
+<script src="/js/common.js"></script>
+<script src="/js/quiz.js"></script>
+<script src="/js/i2.js"></script>
+</body>
+</html>
