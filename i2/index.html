@@ -40,7 +40,7 @@
     <thead><tr><th>Jenis emiten</th><th>Metode utama</th><th>Kenapa</th></tr></thead>
     <tbody>
       <tr><td><strong>Non-bank, arus kas stabil</strong></td><td>DCF (FCFF)</td><td>Nilai = kas yang bisa diambil pemilik di masa depan, didiskon</td></tr>
-      <tr><td><strong>Bank / finansial</strong></td><td>DDM / residual income / P-BV</td><td>DCF tidak cocok untuk bank — utang adalah bahan baku, bukan beban</td></tr>
+      <tr><td><strong>Bank / finansial</strong></td><td>DDM / residual income / P/BV</td><td>DCF tidak cocok untuk bank — utang adalah bahan baku, bukan beban</td></tr>
       <tr><td><strong>Konglomerat multi-segmen</strong></td><td>SOTP (sum-of-the-parts)</td><td>Tiap segmen punya risiko &amp; kelipatan berbeda — satu DCF menutupi itu</td></tr>
       <tr><td><strong>Siklikal (komoditas, properti)</strong></td><td>Mid-cycle earnings × multiple normal</td><td>DCF di puncak siklus = membeli puncak; pakai laba tengah-siklus</td></tr>
       <tr><td><strong>Growth tanpa laba</strong></td><td>Reverse-DCF</td><td>Balik pertanyaannya: pertumbuhan berapa yang SUDAH dihargai pasar? Masuk akal tidak?</td></tr>
@@ -75,18 +75,19 @@
 <section class="id-sec">
   <h2>4 · Lembar valuasi 1 emiten (contoh ilustratif)</h2>
   <p><span class="ilus" style="display:inline-block">ILUSTRATIF — EMITEN FIKTIF</span></p>
+  <p>Emiten di bawah ini adalah <strong>PT Sinar Ritel</strong> (fiktif) — emiten yang sama dengan thesis contoh di I1 §2 (BUY, target Rp2.062) dan contoh sizing di I3 §2. Semua angka di I1, I2 §4/§6, dan I3 merujuk ke lembar yang sama.</p>
   <div class="tblwrap"><table class="stmt">
     <thead><tr><th>Pos</th><th class="num">Nilai</th><th>Catatan</th></tr></thead>
     <tbody>
       <tr><td>FCFF</td><td class="num">Rp150 M</td><td>Dari model (diajarkan di FMVA H08–H15)</td></tr>
-      <tr><td>g / WACC</td><td class="num">3% / 10%</td><td>g &lt; pertumbuhan ekonomi jangka panjang</td></tr>
-      <tr><td>Enterprise value</td><td class="num">Rp2.207 M</td><td>150 × 1,03 ÷ (0,10 − 0,03)</td></tr>
+      <tr><td>g / WACC</td><td class="num">3% / 9,39%</td><td>g &lt; pertumbuhan ekonomi jangka panjang</td></tr>
+      <tr><td>Enterprise value</td><td class="num">Rp2.417 M</td><td>150 × 1,03 ÷ (0,0939 − 0,03)</td></tr>
       <tr><td>(−) Net debt</td><td class="num">Rp400 M</td><td>Utang 900 − kas 500</td></tr>
-      <tr><td>Equity value</td><td class="num">Rp1.807 M</td><td></td></tr>
+      <tr><td>Equity value</td><td class="num">Rp2.017 M</td><td></td></tr>
       <tr><td>(÷) Saham beredar</td><td class="num">978 jt</td><td>Diluted</td></tr>
-      <tr><td><strong>Target price</strong></td><td class="num"><strong>Rp1.850</strong></td><td>1.807 ÷ 0,978 = 1,848 → dibulatkan</td></tr>
+      <tr><td><strong>Target price</strong></td><td class="num"><strong>Rp2.062</strong></td><td>2.017 ÷ 0,978 = 2.062 → dibulatkan</td></tr>
       <tr><td>Harga pasar</td><td class="num">Rp1.500</td><td></td></tr>
-      <tr><td><strong>Upside</strong></td><td class="num"><strong>23%</strong></td><td>MOS ≈19% ((1.850−1.500)/1.850) — memadai untuk ritel stabil</td></tr>
+      <tr><td><strong>Upside</strong></td><td class="num"><strong>37%</strong></td><td>MOS ≈27% ((2.062−1.500)/2.062) — memadai untuk ritel stabil</td></tr>
     </tbody>
   </table></div>
   <p>Lembar seperti ini — satu tabel, semua asumsi terlihat — adalah yang kamu bawa ke <a href="/simulator/">simulator komite</a>.</p>
@@ -112,7 +113,7 @@
       <tr><td><strong>Target price</strong></td><td class="num"></td><td class="num"></td><td class="num"><strong>Rp3.280</strong></td></tr>
     </tbody>
   </table></div>
-  <p>Hitungan: 300 × 8 = 2.400; 120 × 10 = 1.200; 80 × 6 = 480; total 4.080 − 800 = 3.280; 3.280 ÷ 1.000 = 3.280. Satu pertimbangan yang sering ditambahkan analis: <strong>holding discount</strong> — konglomerat biasanya diperdagangkan 10–20% di bawah jumlah segmennya. Bila diterapkan 10%: EV 4.080 × 0,9 = 3.672 → equity 2.872 → target <strong>Rp2.872</strong>. Tuliskan apakah kamu memakainya atau tidak — jangan diam-diam. Cara yang sama dipakai FMVA Real Case ASII.</p>
+  <p>Hitungan: 300 × 8 = 2.400; 120 × 10 = 1.200; 80 × 6 = 480; total 4.080 − 800 = 3.280; 3.280 ÷ 1.000 = 3.280. Keputusan: harga pasar (ilustratif) <strong>Rp2.500</strong> → upside ke target Rp3.280 = <strong>31%</strong> (MOS ≈24% — (3.280−2.500)/3.280); bila holding discount 10% dipakai, target Rp2.872 → upside <strong>15%</strong> (MOS ≈13%) — tetap menarik, tapi margin menipis dan keputusan bergantung pada apakah kamu memakai diskon itu.</p> Satu pertimbangan yang sering ditambahkan analis: <strong>holding discount</strong> — konglomerat biasanya diperdagangkan 10–20% di bawah jumlah segmennya. Bila diterapkan 10%: EV 4.080 × 0,9 = 3.672 → equity 2.872 → target <strong>Rp2.872</strong>. Tuliskan apakah kamu memakainya atau tidak — jangan diam-diam. Cara yang sama dipakai FMVA Real Case ASII.</p>
 
   <h3>5.2 · DDM dan residual income — bank</h3>
   <p><span class="ilus" style="display:inline-block">ILUSTRATIF — EMITEN FIKTIF</span></p>
@@ -128,18 +129,18 @@
       <tr><td>Cost of equity</td><td class="num">11%</td><td>CAPM (§6)</td></tr>
     </tbody>
   </table></div>
-  <p><strong>DDM:</strong> 120 ÷ (0,11 − 0,06) = 120 ÷ 0,05 = <strong>Rp2.400</strong>. <strong>Residual income:</strong> laba residu tahun 1 = (12% − 11%) × 2.000 = Rp20; nilai = 2.000 + 20 ÷ (0,11 − 0,06) = 2.000 + 400 = <strong>Rp2.400</strong>. Kedua metode bertemu — asumsi konsisten. Cek silang: P/BV = 2.400 ÷ 2.000 = 1,2× — bank dengan ROE 12% di atas cost of equity 11% memang layak di atas nilai buku (bandingkan I2 §3: P/BV &lt; 1 hanya masuk akal bila ROE &lt; cost of equity). Valuasi bank diajarkan penuh di FMVA Real Case BBCA.</p>
+  <p><strong>DDM:</strong> 120 ÷ (0,11 − 0,06) = 120 ÷ 0,05 = <strong>Rp2.400</strong>. <strong>Residual income:</strong> laba residu tahun 1 = (12% − 11%) × 2.000 = Rp20; nilai = 2.000 + 20 ÷ (0,11 − 0,06) = 2.000 + 400 = <strong>Rp2.400</strong>. Kedua metode bertemu — asumsi konsisten. Cek silang: P/BV = 2.400 ÷ 2.000 = 1,2× — bank dengan ROE 12% di atas cost of equity 11% memang layak di atas nilai buku (bandingkan I2 §3: P/BV &lt; 1 hanya masuk akal bila ROE &lt; cost of equity). Keputusan: harga pasar (ilustratif) <strong>Rp2.000</strong> (= nilai buku, P/BV 1,0×) → upside ke target Rp2.400 = <strong>20%</strong> (MOS ≈17% — (2.400−2.000)/2.400), memadai untuk bank dengan ROE di atas cost of equity. Valuasi bank diajarkan penuh di FMVA Real Case BBCA.</p>
 
   <h3>5.3 · Mid-cycle — siklikal</h3>
   <p><span class="ilus" style="display:inline-block">ILUSTRATIF — EMITEN FIKTIF</span></p>
   <p><strong>PT Tambang Merdeka</strong> (fiktif), produsen komoditas. Laba 10 tahun terakhir (Rp/saham): 100, 150, 200, 350, 500, 650, 750, 600, 400, 300 — jumlah 4.000, rata-rata <strong>Rp400</strong>. Kelipatan normal (rata-rata historis, ilustratif) 8× → target <strong>Rp3.200</strong>.</p>
-  <p>Jebakannya: pakai EPS puncak siklus Rp750 × 8 = <strong>Rp6.000</strong> — hampir 2× nilai benar, tepat sebelum siklus berbalik. Pakai EPS bawah Rp100 × 8 = <strong>Rp800</strong> — kamu menjual di bawah nilai. DCF di puncak siklus membuat kesalahan yang sama dengan baju berbeda: proyeksi yang "masuk akal" di puncak hampir selalu terlalu tinggi. Aturan: <strong>untuk siklikal, laba yang dipakai adalah laba tengah-siklus, bukan laba tahun ini.</strong></p>
+  <p>Jebakannya: pakai EPS puncak siklus Rp750 × 8 = <strong>Rp6.000</strong> — hampir 2× nilai benar, tepat sebelum siklus berbalik. Pakai EPS bawah Rp100 × 8 = <strong>Rp800</strong> — kamu menjual di bawah nilai. Uji sensitivitas: median deret ini <strong>Rp375</strong> (bukan Rp400) → target 375 × 8 = <strong>Rp3.000</strong>, 6% di bawah target rata-rata — rata-rata tertarik ke atas oleh puncak Rp750, jadi bila siklus saat ini sedang turun, pakai median (atau rata-rata jendela yang lebih panjang) sebagai pembanding sebelum memutuskan. Keputusan: harga pasar (ilustratif) <strong>Rp2.400</strong> (= EPS bawah siklus Rp300 × 8 — pasar menghargai titik bawah siklus) → upside ke target Rp3.200 = <strong>33%</strong> (MOS 25%); ke target median Rp3.000 upside tetap 25% (MOS ≈20%). DCF di puncak siklus membuat kesalahan yang sama dengan baju berbeda: proyeksi yang "masuk akal" di puncak hampir selalu terlalu tinggi. Aturan: <strong>untuk siklikal, laba yang dipakai adalah laba tengah-siklus, bukan laba tahun ini.</strong></p>
 
   <h3>5.4 · Reverse-DCF — growth tanpa laba stabil</h3>
   <p><span class="ilus" style="display:inline-block">ILUSTRATIF — EMITEN FIKTIF</span></p>
   <p><strong>PT Kirim Cepat</strong> (fiktif), logistik yang sedang tumbuh. Jangan tanya "berapa nilainya?" dulu — balik pertanyaannya: <strong>pertumbuhan berapa yang SUDAH dihargai pasar?</strong> Harga pasar Rp5.000 × 500 jt saham = equity Rp2.500 M; + net debt Rp500 M = EV Rp3.000 M. FCFF Rp120 M, WACC 12%:</p>
   <p>3.000 = 120 × (1 + g) ÷ (0,12 − g) → 360 − 3.000g = 120 + 120g → 240 = 3.120g → <strong>g ≈ 7,7%</strong>. Cek: 120 × 1,0769 ÷ (0,12 − 0,0769) = 129,23 ÷ 0,0431 ≈ Rp2.998 M — selisih Rp2 M dari pembulatan g, bisa diabaikan.</p>
-  <p>Vonisnya ada di perbandingan: pasar menghargai pertumbuhan FCFF <strong>7,7% selamanya</strong>. Pertumbuhan historis perusahaan ini 5% (ilustratif) dan pertumbuhan ekonomi jangka panjang ±5%. Bila kamu percaya g hanya 5%: EV = 120 × 1,05 ÷ (0,12 − 0,05) = 126 ÷ 0,07 = Rp1.800 M → equity 1.300 M → target <strong>Rp2.600</strong> — jauh di bawah harga Rp5.000 → <strong>PASS</strong>. Cara yang sama dipakai FMVA Real Case TSLA (g implied 38,7% — pasar menghargai pertumbuhan yang hampir mustahil).</p>
+  <p>Vonisnya ada di perbandingan: pasar menghargai pertumbuhan FCFF <strong>7,7% selamanya</strong>. Pertumbuhan historis perusahaan ini 5% (ilustratif) dan pertumbuhan ekonomi jangka panjang ±5%. Bila kamu percaya g hanya 5%: EV = 120 × 1,05 ÷ (0,12 − 0,05) = 126 ÷ 0,07 = Rp1.800 M → equity 1.300 M → target <strong>Rp2.600</strong> — jauh di bawah harga Rp5.000 → <strong>PASS</strong>. Catatan: g = 5% adalah kasus batas — aturan §4 mensyaratkan g di bawah pertumbuhan ekonomi jangka panjang (±5%), jadi skenario ini menyentuh batas atasnya; vonis PASS tidak berubah bila g diturunkan sedikit (g 4,5% → EV ≈Rp1.672 M, target ≈Rp2.344 — tetap jauh di bawah Rp5.000). Cara yang sama dipakai FMVA Real Case TSLA (g implied 38,7% — pasar menghargai pertumbuhan yang hampir mustahil).</p>
 
   <h3>5.5 · Distress — kapan jawabannya "jangan"</h3>
   <p><span class="ilus" style="display:inline-block">ILUSTRATIF — EMITEN FIKTIF</span></p>
@@ -156,28 +157,39 @@
       <tr><td><strong>Nilai ekuitas</strong></td><td class="num"></td><td class="num"></td><td class="num"><strong>Rp0</strong></td></tr>
     </tbody>
   </table></div>
-  <p>Hitungan: 100 + 140 + 150 + 160 = 550; 550 − 900 = −350 → ekuitas <strong>Rp0</strong> (ekuitas tidak bisa negatif — pemegang saham mendapat nol, kreditur menanggung rugi Rp350 M). Pelajarannya: bila nilai likuidasi di bawah utang, tidak ada "target price" yang bisa ditulis dengan jujur. Ini bukan wilayah analis ekuitas — ini meja kredit/workout (lihat Credit Desk). <strong>"Jangan" adalah jawaban yang benar, bukan kegagalan analisis.</strong></p>
+  <p>Hitungan: 100 + 140 + 150 + 160 = 550; 550 − 900 = −350 → ekuitas <strong>Rp0</strong> (ekuitas tidak bisa negatif — pemegang saham mendapat nol, kreditur menanggung rugi Rp350 M). Keputusan: harga pasar (ilustratif) <strong>Rp500</strong> per saham pun masih di atas nilai Rp0 — upside −100%, tidak ada MOS sama sekali → <strong>PASS</strong>, berapapun harga pasarnya selama di atas nol. Pelajarannya: bila nilai likuidasi di bawah utang, tidak ada "target price" yang bisa ditulis dengan jujur. Ini bukan wilayah analis ekuitas — ini meja kredit/workout (lihat Credit Desk). <strong>"Jangan" adalah jawaban yang benar, bukan kegagalan analisis.</strong></p>
 </section>
 
 <section class="id-sec">
-  <h2>6 · Dari mana WACC 10% itu?</h2>
-  <p>WACC 10% di model kanonis (§4) bukan angka dari langit — ini turunannya, dari komponen yang masing-masing bisa diuji. Mekanik lengkap WACC diajarkan penuh di <strong>FMVA Sprint Hari 09</strong> (tidak diulang di sini); bagian ini menunjukkan penurunan untuk model kanonis dan cara menguji sensitivitasnya.</p>
+  <h2>6 · Dari mana WACC 9,39% itu?</h2>
+  <p>WACC 9,39% di model kanonis (§4) bukan angka dari langit — ini turunannya, dari komponen yang masing-masing bisa diuji. Mekanik lengkap WACC diajarkan penuh di <strong>FMVA Sprint Hari 09</strong> (tidak diulang di sini); bagian ini menunjukkan penurunan untuk model kanonis dan cara menguji sensitivitasnya.</p>
   <div class="tblwrap"><table class="stmt">
     <thead><tr><th>Komponen</th><th class="num">Nilai</th><th>Catatan</th></tr></thead>
     <tbody>
-      <tr><td>Bobot ekuitas (wE)</td><td class="num">81,9%</td><td>1.807 ÷ 2.207 (nilai pasar, bukan nilai buku)</td></tr>
-      <tr><td>Bobot utang (wD)</td><td class="num">18,1%</td><td>400 ÷ 2.207</td></tr>
+      <tr><td>Bobot ekuitas (wE)</td><td class="num">69,1%</td><td>2.017 ÷ 2.917 (nilai pasar ekuitas ÷ total modal bruto) — bobot titik-tetap, lihat iterasi di bawah</td></tr>
+      <tr><td>Bobot utang (wD)</td><td class="num">30,9%</td><td>900 ÷ 2.917 — UTANG BRUTO, bukan net debt: kas Rp500 M adalah aset non-operasi yang dinilai terpisah; tax shield dihitung atas bunga utang bruto, jadi bobot utang memakai utang bruto. Net debt (Rp400 M) hanya dipakai di jembatan EV → ekuitas, bukan di bobot WACC</td></tr>
       <tr><td>Risk-free rate (Rf)</td><td class="num">6%</td><td>Yield SBN 10 tahun (ilustratif)</td></tr>
       <tr><td>Beta (β)</td><td class="num">0,8</td><td>Regresi return saham vs IHSG (ilustratif)</td></tr>
-      <tr><td>Equity risk premium (ERP)</td><td class="num">6%</td><td>Kisaran Indonesia (ilustratif)</td></tr>
+      <tr><td>Equity risk premium (ERP)</td><td class="num">6%</td><td>Dipakai 6% — titik tengah kisaran Indonesia ±5–6% (ilustratif)</td></tr>
       <tr><td><strong>Cost of equity (CAPM)</strong></td><td class="num"><strong>10,8%</strong></td><td>6% + 0,8 × 6%</td></tr>
       <tr><td>Cost of debt (pre-tax)</td><td class="num">8%</td><td>Kupon/yield utang perusahaan (ilustratif)</td></tr>
       <tr><td>Cost of debt (after tax)</td><td class="num">6,24%</td><td>8% × (1 − 22%)</td></tr>
-      <tr><td><strong>WACC</strong></td><td class="num"><strong>9,97% ≈ 10%</strong></td><td>0,819 × 10,8% + 0,181 × 6,24%</td></tr>
+      <tr><td><strong>WACC</strong></td><td class="num"><strong>9,39%</strong></td><td>0,691 × 10,8% + 0,309 × 6,24% (titik-tetap — lihat iterasi di bawah)</td></tr>
     </tbody>
   </table></div>
-  <p>Hitungan: 0,819 × 10,8 = 8,84; 0,181 × 6,24 = 1,13; total 9,97% → <strong>model kanonis membulatkan ke 10%</strong>. Tiga tempat mencari inputnya: Rf dari yield SBN 10 tahun, β dari regresi return saham terhadap IHSG, ERP dari kisaran pasar Indonesia (±5–6%, ilustratif). Cost of debt dari kupon obligasi atau yield utang perusahaan yang sebanding.</p>
-  <div class="honest"><strong>Uji sensitivitas — WACC bukan konstanta:</strong> bila β naik 0,8 → 1,0 (perusahaan ternyata serisiko pasar), CoE jadi 12% dan WACC jadi ±11,0% → EV = 150 × 1,03 ÷ (0,11 − 0,03) = Rp1.931 M → equity Rp1.531 M → target <strong>≈Rp1.566 (−15%)</strong>. Satu input yang bergerak 0,2 memangkas target 15% — target yang tidak tahan uji WACC adalah target yang rapuh. Tuliskan WACC-mu beserta komponennya di lembar valuasi, seperti di §4.</div>
+  <p><strong>Iterasi titik-tetap (jawaban atas sirkularitas bobot):</strong> bobot butuh nilai pasar ekuitas, tapi nilai pasar ekuitas keluar dari WACC yang sedang dihitung — jadi hitung berulang sampai stabil. Titik awal tidak penting: iterasi konvergen ke angka yang sama dari titik awal mana pun.</p>
+  <div class="tblwrap"><table class="stmt">
+    <thead><tr><th>Iterasi</th><th class="num">wE / wD</th><th class="num">WACC</th><th class="num">EV</th><th class="num">Ekuitas</th></tr></thead>
+    <tbody>
+      <tr><td>0 (bobot dari nilai lama)</td><td class="num">66,8% / 33,2%</td><td class="num">9,28%</td><td class="num">Rp2.459 M</td><td class="num">Rp2.059 M</td></tr>
+      <tr><td>1</td><td class="num">69,6% / 30,4%</td><td class="num">9,41%</td><td class="num">Rp2.409 M</td><td class="num">Rp2.009 M</td></tr>
+      <tr><td>2</td><td class="num">69,1% / 30,9%</td><td class="num">9,39%</td><td class="num">Rp2.418 M</td><td class="num">Rp2.018 M</td></tr>
+      <tr><td>3</td><td class="num">69,2% / 30,8%</td><td class="num">9,39%</td><td class="num">Rp2.416 M</td><td class="num">Rp2.016 M</td></tr>
+      <tr><td><strong>Titik-tetap</strong></td><td class="num"><strong>69,1% / 30,9%</strong></td><td class="num"><strong>9,39%</strong></td><td class="num"><strong>Rp2.417 M</strong></td><td class="num"><strong>Rp2.017 M</strong></td></tr>
+    </tbody>
+  </table></div>
+  <p>Hitungan titik-tetap: 0,691 × 10,8 = 7,47; 0,309 × 6,24 = 1,93; total 9,39%. Catatan pembulatan: WACC ditampilkan 2 desimal; EV dan target dihitung dari nilai penuh 9,3929% — bila kamu mereplikasi dengan 9,39% hasilnya ≈Rp1 M lebih tinggi (0,05%), itu pembulatan, bukan kesalahan. Catatan koreksi: versi sebelumnya memakai bobot net debt (wD 18,1%, WACC 9,97%) — itu keliru secara textbook; bobot WACC memakai utang bruto. Koreksi ini menaikkan target dari Rp1.850 ke Rp2.062. Tiga tempat mencari inputnya: Rf dari yield SBN 10 tahun, β dari regresi return saham terhadap IHSG, ERP 6% (titik tengah kisaran pasar Indonesia ±5–6%, ilustratif — 6% inilah yang dipakai di model). Cost of debt dari kupon obligasi atau yield utang perusahaan yang sebanding.</p>
+  <div class="honest"><strong>Uji sensitivitas — WACC bukan konstanta:</strong> bila β naik 0,8 → 1,0 (perusahaan ternyata serisiko pasar), CoE jadi 12% dan WACC jadi ±10,2% (eksak 10,22%) → EV = 150 × 1,03 ÷ (0,1022 − 0,03) = Rp2.139 M → equity Rp1.739 M → target <strong>≈Rp1.778 (−14%)</strong>. Satu input yang bergerak 0,2 memangkas target 14% — target yang tidak tahan uji WACC adalah target yang rapuh. Tuliskan WACC-mu beserta komponennya di lembar valuasi, seperti di §4.</div>
 </section>
 
 <section class="id-sec">
