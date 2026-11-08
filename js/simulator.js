@@ -42,7 +42,7 @@ var STOCKS = {
       "Tidak ada keunggulan biaya vs peers — price taker murni.",
       "Dividen dipotong 2x dalam 5 tahun mengikuti siklus."],
     key: { decision: "hold", target: 3300, tol: 60,
-           why: "Target Rp3.300 vs Rp3.200 = upside 3,1% — tidak cukup untuk siklikal (butuh MOS 30%+). Bukan thesis jual (bisnis tidak rusak), tapi bukan thesis beli. Upside 3,1% ini memicu review jual (I3 §1 alasan 2) — review, bukan jual otomatis: hasil review, bisnis tidak rusak, jadi tahan, jangan tambah." },
+           why: "Target Rp3.300 vs Rp3.200 = upside 3,1% — tidak cukup untuk siklikal (butuh MOS 30%+). Bukan thesis jual (bisnis tidak rusak), tapi bukan thesis beli. Upside 3,1% ini memicu review jual (I3 §1 pemicu 2) — review, bukan jual otomatis: hasil review, bisnis tidak rusak, jadi tahan, jangan tambah." },
     comm: [
       { q: "Upside dari TARGET-MU vs harga pasar Rp3.200? (%)", dyn: "up", tol: 1, why: "Upside = (target-mu − 3.200) ÷ 3.200." },
       { q: "Bila FCFF turun 12,5% (komoditas −20%), target barunya? (Rp)", ans: 2800, tol: 60, why: "FCFF 350 → EV 3.967 → equity 3.167 → ÷1.131 = Rp2.800." },
@@ -117,11 +117,12 @@ pitchBtns.forEach(function(btn){
 document.getElementById("to-committee").addEventListener("click", function(){
   if(!decision){ alert("Pilih keputusan dulu (BUY / HOLD / PASS)."); return; }
   var target = parseIDNumber(document.getElementById("t-target").value,false);
+  var targetWarn = parseIDNumber.lastWarning;
   var method = document.getElementById("t-method").value;
   var bull = document.getElementById("t-bull").value.trim();
   var risk = document.getElementById("t-risk").value.trim();
   var inv = document.getElementById("t-inv").value.trim();
-  if(isNaN(target)||target<=0){ alert("Isi target price (angka)."); return; }
+  if(isNaN(target)||target<=0){ alert(isNaN(target)?("Target price tidak bisa dibaca: "+(targetWarn||"format angka tidak dikenal.")):"Isi target price (angka lebih dari 0)."); return; }
   if(!method){ alert("Pilih metode valuasi."); return; }
   if(bull.length<20){ alert("Tulis bull case yang serius (min. 20 karakter)."); return; }
   if(risk.length<20){ alert("Tulis risiko utama + dampaknya (min. 20 karakter)."); return; }
@@ -147,9 +148,10 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   fb.push("<b>Keputusan Anda: "+dLabel+"</b> — kunci komite: <b>"+kLabel+"</b> ("+dScore+"/3).<br>"+s.key.why);
   /* 2. target price (2) */
   var target = parseIDNumber(document.getElementById("t-target").value,false);
+  var targetWarn = parseIDNumber.lastWarning;
   var tScore = (!isNaN(target) && Math.abs(target-s.key.target) <= s.key.tol) ? 2 : 0;
   score += tScore;
-  fb.push("<b>Target price ("+tScore+"/2):</b> Anda Rp"+fmtID(target)+" — kunci Rp"+fmtID(s.key.target)+" (±"+s.key.tol+").");
+  fb.push("<b>Target price ("+tScore+"/2):</b> "+(isNaN(target)?("Tidak terbaca — "+targetWarn+" "):("Anda Rp"+fmtID(target)+" — "))+"kunci Rp"+fmtID(s.key.target)+" (±"+s.key.tol+").");
   /* invalidasi tertulis (G2) — ditampilkan kembali di vonis agar diuji terhadap Q4 komite */
   var invTxt = document.getElementById("t-inv").value.trim();
   var invSafe = invTxt.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
@@ -159,6 +161,7 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   for(var i=0;i<3;i++){
     var cq = s.comm[i];
     var v = parseIDNumber(document.getElementById("cq"+i).value, true);
+    var vWarn = parseIDNumber.lastWarning;
     var exp = cq.ans, ok;
     if(cq.dyn && !isNaN(target) && target>0){
       var mkt = s.nums[0][1];
@@ -166,18 +169,19 @@ document.getElementById("to-verdict").addEventListener("click", function(){
     }
     ok = !isNaN(v) && Math.abs(v-exp) <= cq.tol; /* tol = ABSOLUT (bukan relatif) */
     if(ok) cScore++;
-    cFb.push("Q"+(i+1)+": "+(ok?"✓":"✗")+" — "+cq.why+(cq.dyn?" (target-mu Rp"+fmtID(target)+")":""));
+    cFb.push("Q"+(i+1)+": "+(ok?"✓":"✗")+" — "+(isNaN(v)?("Jawaban tidak terbaca: "+vWarn+" "):"")+cq.why+(cq.dyn?" (target-mu Rp"+fmtID(target)+")":""));
   }
   score += cScore;
   fb.push("<b>Bear challenges ("+cScore+"/3):</b><br>• "+cFb.join("<br>• "));
   /* 4. Q4 (2) — invalidasi (A/C) atau batas beli (B) */
   var iq = s.comm[3];
   var iv = parseIDNumber(document.getElementById("cq3").value, true);
+  var ivWarn = parseIDNumber.lastWarning;
   var iOk = !isNaN(iv) && Math.abs(iv-iq.ans) <= iq.tol;
   var iScore = iOk ? 2 : 0;
   score += iScore;
   var iLabel = iq.q.indexOf("BATAS BELI")===0 ? "Batas beli" : "Invalidasi";
-  fb.push("<b>"+iLabel+" ("+iScore+"/2):</b> "+(iOk?"✓":"✗")+" — "+iq.why);
+  fb.push("<b>"+iLabel+" ("+iScore+"/2):</b> "+(iOk?"✓":"✗")+" — "+(isNaN(iv)?("Jawaban tidak terbaca: "+ivWarn+" "):"")+iq.why);
   /* Gerbang keputusan: LULUS wajib skor ≥7 DAN keputusan benar. Tanpa gerbang ini,
      keputusan salah + sisa sempurna = 7/10 tetap lolos (review Instinct 2026-11-05). */
   var decOk = (decision === s.key.decision);

@@ -2,10 +2,10 @@
 var ID_QUIZ=[
  {q:"Alasan jual yang SAH adalah…",
   opts:["Harga turun 15% dari harga beli","Thesis rusak — invalidasi yang ditulis sebelum beli terpicu","Butuh uang untuk keperluan lain","Bosan karena harga stagnan 6 bulan"],
-  ans:1,why:"Tiga alasan sah: thesis rusak, harga mencapai nilai, ada yang lebih baik. Sisanya emosi atau masalah kas. Contoh invalidasi Sinar Ritel (I1): same-store sales turun 2 kuartal, FCFF turun ≥20% (target ≈Rp1.568), atau harga menyentuh Rp1.400."},
- {q:"\"Profit taking\" 20% padahal target belum tercapai adalah…",
+  ans:1,why:"Tiga pemicu review jual yang sah (I3 §1): thesis rusak (jual langsung — invalidasi ditulis sebelum beli), harga mencapai nilai, ada yang lebih baik. Sisanya emosi atau masalah kas. Contoh invalidasi Sinar Ritel (I1): same-store sales turun 2 kuartal, FCFF turun ≥20% (target ≈Rp1.568), atau harga menyentuh Rp1.400."},
+ {q:"\"Profit taking\" 20% — jual hanya karena sudah untung, tanpa pemicu tertulis dan upside tersisa masih >10% — padahal target belum tercapai, adalah…",
   opts:["Disiplin yang baik","Alasan jual yang sah","Keputusan tanpa thesis — tidak sah","Wajib bila sudah untung"],
-  ans:2,why:"Salah — yang tidak sah adalah jual tanpa pemicu tertulis. Menjual saat upside tersisa <10% (harga ≳Rp1.875) atau saat target Rp2.062 tercapai adalah keputusan ber-thesis: kedua pemicu itu tertulis di §1 alasan 2. Yang tidak sah: jual hanya karena 'sudah untung 20%'."},
+  ans:2,why:"Salah — yang tidak sah adalah jual tanpa pemicu tertulis. Menjual saat upside tersisa <10% (harga ≳Rp1.875) atau saat target Rp2.062 tercapai adalah keputusan ber-thesis: kedua pemicu itu tertulis di §1 pemicu 2. Contoh kanonis (beli Rp1.500): naik 20% = Rp1.800, upside tersisa (2.062−1.800)/1.800 = 14,6% — masih di atas ambang 10%, jadi tidak ada pemicu tertulis yang terpicu. Yang tidak sah: jual hanya karena 'sudah untung 20%'."},
  {q:"Aturan batas per posisi (maks 10–15%) bertujuan…",
   opts:["Memaksimalkan return","Memastikan satu thesis yang salah tidak membunuh portfolio","Mengikuti aturan regulator","Memudahkan pajak"],
   ans:1,why:"Sizing tidak membuat thesis benar — ia membatasi kerusakan dari thesis yang salah."},
