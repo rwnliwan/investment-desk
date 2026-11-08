@@ -47,8 +47,8 @@ var STOCKS = {
       { q: "Upside dari TARGET-MU vs harga pasar Rp3.200? (%)", dyn: "up", tol: 1, why: "Upside = (target-mu − 3.200) ÷ 3.200." },
       { q: "Bila FCFF turun 12,5% (komoditas −20%), target barunya? (Rp)", ans: 2800, tol: 60, why: "FCFF 350 → EV 3.967 → equity 3.167 → ÷1.131 = Rp2.800." },
       { q: "P/E di harga pasar? (x) — EPS Rp300", ans: 10.7, tol: 0.5, why: "3.200 ÷ 300 = 10,7x — wajar, tidak murah." },
-      { q: "INVALIDASI: harga beli MAKSIMUM dengan MOS 30% (siklikal)? (Rp)", ans: 2310, tol: 60, inv: true,
-        why: "MOS = (nilai − harga) ÷ nilai. MOS 30% → harga = 3.300 × 0,70 = Rp2.310. Di atas itu = membayar tanpa buffer siklus." }
+      { q: "BATAS BELI: harga beli MAKSIMUM dengan MOS 30% (siklikal)? (Rp)", ans: 2310, tol: 60,
+        why: "MOS = (nilai − harga) ÷ nilai. MOS 30% → harga = 3.300 × 0,70 = Rp2.310. Ini batas untuk MEMBUKA posisi, bukan pemicu jual: di atas Rp2.310 kamu membayar tanpa buffer siklus — posisi yang sudah dimiliki tidak otomatis dijual di sini." }
     ]
   },
   C: {
@@ -68,7 +68,7 @@ var STOCKS = {
     comm: [
       { q: "Downside dari TARGET-MU vs harga pasar Rp5.000? (%)", dyn: "down", tol: 2, why: "Downside = (5.000 − target-mu) ÷ 5.000." },
       { q: "CFO rata-rata 3 tahun bila NI 348 dan CFO/NI 40%? (Rp miliar)", ans: 139, tol: 5, why: "348 × 0,4 = 139,2." },
-      { q: "Selisih NI − CFO = ? (Rp miliar) — inilah laba kertasnya", ans: 209, tol: 8, why: "348 − 139 = 209. Laba yang tidak pernah jadi kas." },
+      { q: "Selisih NI − CFO = ? (Rp miliar) — selisih laba dan kas yang perlu ditelusuri", ans: 209, tol: 8, why: "348 − 139 = 209. Ini selisih SATU periode — belum membuktikan kas tidak pernah diterima (bisa perubahan modal kerja/timing). Yang perlu ditelusuri: piutang/persediaan menumpuk atau revenue recognition agresif." },
       { q: "INVALIDASI (bagi yang nekat BUY): g berapa agar target = Rp5.000? (%)", ans: 4.6, tol: 0.3, inv: true,
         why: "Butuh g 4,65% perpetuitas untuk properti siklikal — tidak masuk akal. Thesis BUY mati di sini." }
     ]
@@ -120,10 +120,12 @@ document.getElementById("to-committee").addEventListener("click", function(){
   var method = document.getElementById("t-method").value;
   var bull = document.getElementById("t-bull").value.trim();
   var risk = document.getElementById("t-risk").value.trim();
+  var inv = document.getElementById("t-inv").value.trim();
   if(isNaN(target)||target<=0){ alert("Isi target price (angka)."); return; }
   if(!method){ alert("Pilih metode valuasi."); return; }
   if(bull.length<20){ alert("Tulis bull case yang serius (min. 20 karakter)."); return; }
   if(risk.length<20){ alert("Tulis risiko utama + dampaknya (min. 20 karakter)."); return; }
+  if(inv.length<20){ alert("Tulis invalidasi yang spesifik — angka/kejadian yang membuatmu JUAL (min. 20 karakter)."); return; }
   var s = STOCKS[cur], h = "";
   s.comm.forEach(function(cq,i){
     h += '<div class="id-field" style="margin-bottom:.8rem"><label>'+(i+1)+'. '+cq.q+'</label>'
@@ -148,6 +150,10 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   var tScore = (!isNaN(target) && Math.abs(target-s.key.target) <= s.key.tol) ? 2 : 0;
   score += tScore;
   fb.push("<b>Target price ("+tScore+"/2):</b> Anda Rp"+fmtID(target)+" — kunci Rp"+fmtID(s.key.target)+" (±"+s.key.tol+").");
+  /* invalidasi tertulis (G2) — ditampilkan kembali di vonis agar diuji terhadap Q4 komite */
+  var invTxt = document.getElementById("t-inv").value.trim();
+  var invSafe = invTxt.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  fb.push("<b>Invalidasi tertulis Anda:</b> "+invSafe+" — bandingkan dengan Q4 komite di bawah: apakah angkamu setajam pemicu jual yang diuji di sana?");
   /* 3. komite Q1–Q3 (3) — Q1 dinamis dari target-mu (anti-bocor kunci) */
   var cScore = 0, cFb = [];
   for(var i=0;i<3;i++){
@@ -164,13 +170,14 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   }
   score += cScore;
   fb.push("<b>Bear challenges ("+cScore+"/3):</b><br>• "+cFb.join("<br>• "));
-  /* 4. invalidasi Q4 (2) */
+  /* 4. Q4 (2) — invalidasi (A/C) atau batas beli (B) */
   var iq = s.comm[3];
   var iv = parseIDNumber(document.getElementById("cq3").value, true);
   var iOk = !isNaN(iv) && Math.abs(iv-iq.ans) <= iq.tol;
   var iScore = iOk ? 2 : 0;
   score += iScore;
-  fb.push("<b>Invalidasi ("+iScore+"/2):</b> "+(iOk?"✓":"✗")+" — "+iq.why);
+  var iLabel = iq.q.indexOf("BATAS BELI")===0 ? "Batas beli" : "Invalidasi";
+  fb.push("<b>"+iLabel+" ("+iScore+"/2):</b> "+(iOk?"✓":"✗")+" — "+iq.why);
   /* Gerbang keputusan: LULUS wajib skor ≥7 DAN keputusan benar. Tanpa gerbang ini,
      keputusan salah + sisa sempurna = 7/10 tetap lolos (review Instinct 2026-11-05). */
   var decOk = (decision === s.key.decision);

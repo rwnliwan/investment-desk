@@ -5,7 +5,7 @@ var ID_QUIZ=[
   ans:1,why:"Tiga alasan sah: thesis rusak, harga mencapai nilai, ada yang lebih baik. Sisanya emosi atau masalah kas."},
  {q:"\"Profit taking\" 20% padahal target belum tercapai adalah…",
   opts:["Disiplin yang baik","Alasan jual yang sah","Keputusan tanpa thesis — tidak sah","Wajib bila sudah untung"],
-  ans:2,why:"Menjual tanpa target tercapai = keputusan tanpa thesis. Target tertulis yang menentukan, bukan perasaan untung."},
+  ans:2,why:"Salah — yang tidak sah adalah jual tanpa pemicu tertulis. Menjual saat upside tersisa <10% (harga ≳Rp1.875) atau saat target Rp2.062 tercapai adalah keputusan ber-thesis: kedua pemicu itu tertulis di §1 alasan 2. Yang tidak sah: jual hanya karena 'sudah untung 20%'."},
  {q:"Aturan batas per posisi (maks 10–15%) bertujuan…",
   opts:["Memaksimalkan return","Memastikan satu thesis yang salah tidak membunuh portfolio","Mengikuti aturan regulator","Memudahkan pajak"],
   ans:1,why:"Sizing tidak membuat thesis benar — ia membatasi kerusakan dari thesis yang salah."},

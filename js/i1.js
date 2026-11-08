@@ -8,7 +8,7 @@ var ID_QUIZ=[
   ans:1,why:"Komite membayar untuk perubahan yang belum dihargai (mis. pangsa pasar 18%→22%), bukan untuk fakta yang sudah tercermin di harga."},
  {q:"Risiko yang benar dalam thesis adalah risiko yang…",
   opts:["Bersifat umum seperti kondisi makro","Ditulis agar terlihat lengkap","Spesifik dengan dampak ke target price","Dihindari agar thesis terlihat kuat"],
-  ans:2,why:"Risiko generik = belum mikir. Risiko benar: 'daya beli turun → volume −10% = target turun ke Rp2.050'."},
+  ans:2,why:"Risiko generik = belum mikir. Risiko benar: 'daya beli turun → volume −10% ≈ FCFF −10% → target turun ke ≈Rp1.815' — skenario yang sama dengan risiko (a) di thesis contoh I1 §2."},
  {q:"Dalam thesis testing 3 lensa, pertanyaan lensa FORENSIK adalah…",
   opts:["Bisakah perusahaan bangkrut sebelum thesis terbukti?","Apakah labanya jadi kas (CFO vs laba)?","Apa yang harus terjadi agar thesis benar?","Berapa target price-nya?"],
   ans:1,why:"Lensa forensik = kualitas laba: apakah laba berubah menjadi kas. Value trap paling umum = laba tanpa kas."},
