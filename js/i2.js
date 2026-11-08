@@ -14,7 +14,7 @@ var ID_QUIZ=[
   ans:1,why:"Bisnis stabil cukup 15–20%; siklikal 30–40%; thesis satu-asumsi 40%+ atau jangan beli."},
  {q:"P/E 8x bisa menipu (value trap) bila…",
   opts:["Perusahaan membayar dividen","Labanya tidak menjadi kas (CFO jauh di bawah laba)","Sahamnya likuid","Industrinya defensif"],
-  ans:1,why:"Laba tanpa kas = laba kertas. Selalu cek CFO vs laba 3 tahun sebelum percaya kelipatan murah."}
+  ans:1,why:"CFO yang konsisten jauh di bawah laba adalah red flag; telusuri penyebabnya selama beberapa tahun sebelum percaya kelipatan murah."}
 ];
 var ID_GATE="id_gate_i2";
 IDQuiz.init();
