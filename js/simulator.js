@@ -107,6 +107,25 @@ function openStock(k){
 
 document.getElementById("to-thesis").addEventListener("click", function(){ show("step-thesis"); });
 var pitchBtns = document.querySelectorAll("#pitch-btns .id-opt");
+
+/* Rubrik substansi Step 3 (gap G-1 ronde 6): panjang minimum 20 karakter tidak
+   membuktikan isi — "bisnisnya bagus sekali" bisa lolos 20 karakter tanpa satu
+   angka pun. Setiap kolom harus memuat ANGKA yang bisa diuji komite:
+   - bull: target/upside numerik (angka + satuan: %, Rp, miliar, poin, "→", x)
+   - risk: dampak terkuantifikasi — angka + satuan dampak (%, Rp, miliar, pp, bps)
+   - inv: pemicu spesifik yang teramati — angka (harga/level/%) yang memicu JUAL
+   Fungsi murni (tanpa DOM) agar bisa diuji di Node. Skor 3+2+3+2=10 dan gerbang
+   PASS ≥7 + keputusan benar TIDAK berubah: rubrik ini gerbang masuk komite
+   (seperti cek panjang) + ditampilkan kembali di vonis sebagai bukti. */
+function substanceChecks(bull, risk, inv){
+  var hasNum = function(s){ return /\d/.test(s); };
+  var hasUnit = function(s){ return /(%|\bRp|miliar|juta|poin|persen|→|pp(?![a-z])|bps(?![a-z])|x(?![a-z0-9]))/i.test(s); };
+  return {
+    bull: hasNum(bull) && hasUnit(bull),
+    risk: hasNum(risk) && hasUnit(risk),
+    inv: hasNum(inv) && hasUnit(inv)
+  };
+}
 pitchBtns.forEach(function(btn){
   btn.addEventListener("click", function(){
     pitchBtns.forEach(function(b){b.classList.remove("sel");});
@@ -127,6 +146,10 @@ document.getElementById("to-committee").addEventListener("click", function(){
   if(bull.length<20){ alert("Tulis bull case yang serius (min. 20 karakter)."); return; }
   if(risk.length<20){ alert("Tulis risiko utama + dampaknya (min. 20 karakter)."); return; }
   if(inv.length<20){ alert("Tulis invalidasi yang spesifik — angka/kejadian yang membuatmu JUAL (min. 20 karakter)."); return; }
+  var sub = substanceChecks(bull, risk, inv);
+  if(!sub.bull){ alert("Bull case butuh ANGKA yang bisa diuji — target, upside %, atau level (mis. \"pangsa pasar 18%→22% dalam 3 tahun\"). Narasi tanpa angka tidak lolos komite."); return; }
+  if(!sub.risk){ alert("Risiko butuh DAMPAK TERUKUR — angka + satuan (mis. \"daya beli turun 10% → target turun ke Rp1.900\"). Seberapa besar dampaknya, dalam angka?"); return; }
+  if(!sub.inv){ alert("Invalidasi butuh PEMICU SPESIFIK yang teramati — harga/level/angka (mis. \"FCFF turun ≥20%\" atau \"harga menyentuh Rp1.400\"). \"Bila keadaan memburuk\" bukan pemicu."); return; }
   var s = STOCKS[cur], h = "";
   s.comm.forEach(function(cq,i){
     h += '<div class="id-field" style="margin-bottom:.8rem"><label>'+(i+1)+'. '+cq.q+'</label>'
@@ -156,6 +179,9 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   var invTxt = document.getElementById("t-inv").value.trim();
   var invSafe = invTxt.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
   fb.push("<b>Invalidasi tertulis Anda:</b> "+invSafe+" — bandingkan dengan Q4 komite di bawah: apakah angkamu setajam pemicu jual yang diuji di sana?");
+  /* Rubrik substansi (G-1) — bukti lolos gerbang, ditampilkan di vonis; skor TIDAK berubah */
+  var subV = substanceChecks(document.getElementById("t-bull").value.trim(), document.getElementById("t-risk").value.trim(), invTxt);
+  fb.push("<b>Rubrik substansi Step 3:</b> bull case berangka "+(subV.bull?"✓":"✗")+"; risiko berdampak terukur "+(subV.risk?"✓":"✗")+"; invalidasi berpemicu spesifik "+(subV.inv?"✓":"✗")+" — ketiganya lolos gerbang sebelum komite. Rubrik ini gerbang masuk, bukan poin skor: skor tetap 3+2+3+2=10, PASS ≥7 + keputusan benar.");
   /* 3. komite Q1–Q3 (3) — Q1 dinamis dari target-mu (anti-bocor kunci) */
   var cScore = 0, cFb = [];
   for(var i=0;i<3;i++){
