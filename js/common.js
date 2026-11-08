@@ -3,9 +3,9 @@
    DITOLAK (bukan disalahartikan diam-diam) dan ribuan valid DITERIMA di semua field. */
 function $(s,r){return (r||document).querySelector(s);}
 function $$(s,r){return Array.prototype.slice.call((r||document).querySelectorAll(s));}
-function parseIDNumber(str, isDecimal){
-  /* Format Indonesia yang diterima (isDecimal TIDAK lagi membedakan cabang —
-     satu parser ketat untuk semua field; "2.500" = 2500 di mana pun):
+function parseIDNumber(str){
+  /* Format Indonesia yang diterima (satu parser ketat untuk semua field;
+     TIDAK ada lagi parameter mode — "2.500" = 2500 di mana pun):
      - desimal pakai koma: 36,1 — koma desimal maks. 1, wajib ada digit di kedua sisi
      - ribuan pakai titik: 2.500, 1.234.567, 2.500,00 — kelompok pertama 1–3 digit,
        kelompok berikut tepat 3 digit; titik HANYA sebagai pemisah ribuan

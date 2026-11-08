@@ -23,7 +23,7 @@ var STOCKS = {
            why: "Target DCF Rp2.450 vs Rp1.800 = upside 36,1%; MOS 26,5% — di atas ambang 15–20% untuk bisnis defensif dengan kas terprediksi — sangat memadai." },
     comm: [
       { q: "Upside dari TARGET-MU vs harga pasar Rp1.800? (%)", dyn: "up", tol: 2, why: "Upside = (target-mu − 1.800) ÷ 1.800. Komite menguji matematikamu, bukan hafalan." },
-      { q: "P/E di harga pasar? (x) — EPS Rp180", ans: 10, tol: 0.5, why: "1.800 ÷ 180 = 10x — murah untuk konsumer defensif." },
+      { q: "P/E di harga pasar? (x) — EPS Rp180", ans: 10, tol: 0.5, why: "1.800 ÷ 180 = 10x; murah atau tidak perlu dibandingkan dengan peers, histori, dan prospek pertumbuhan." },
       { q: "Enterprise value dari DCF? (Rp miliar)", ans: 3971, tol: 60, why: "210 × 1,04 ÷ (0,095 − 0,04) = 3.971." },
       { q: "INVALIDASI: FCFF turun berapa % hingga target = Rp1.800 (upside habis)? (%)", ans: 22.6, tol: 2, inv: true,
         why: "Target 1.800 → equity 2.475 → EV 3.075 → FCFF 162,6 → turun 22,6%. Di bawah itu: JUAL." }
@@ -64,12 +64,12 @@ var STOCKS = {
       "Tidak pernah membayar dividen padahal 'laba' tiap tahun.",
       "CFO 3 tahun terakhir rata-rata hanya 40% dari laba bersih."],
     key: { decision: "pass", target: 3600, tol: 60,
-           why: "Target Rp3.600 vs Rp5.000 = downside 28%. P/E 10x terlihat murah = value trap: laba tidak jadi kas + governance red flag. Bukan sekadar mahal — tidak investable." },
+           why: "Target Rp3.600 vs Rp5.000 = downside 28%. P/E 10x terlihat murah = value trap: CFO 3 tahun hanya 40% dari laba + governance red flag — selisih laba-kas ini wajib ditelusuri sebelum percaya kelipatan murah. Bukan sekadar mahal — tidak investable." },
     comm: [
       { q: "Downside dari TARGET-MU vs harga pasar Rp5.000? (%)", dyn: "down", tol: 2, why: "Downside = (5.000 − target-mu) ÷ 5.000." },
       { q: "CFO rata-rata 3 tahun bila NI 348 dan CFO/NI 40%? (Rp miliar)", ans: 139, tol: 5, why: "348 × 0,4 = 139,2." },
       { q: "Selisih NI − CFO = ? (Rp miliar) — selisih laba dan kas yang perlu ditelusuri", ans: 209, tol: 8, why: "348 − 139 = 209. Ini selisih SATU periode — belum membuktikan kas tidak pernah diterima (bisa perubahan modal kerja/timing). Yang perlu ditelusuri: piutang/persediaan menumpuk atau revenue recognition agresif." },
-      { q: "INVALIDASI (bagi yang nekat BUY): g berapa agar target = Rp5.000? (%)", ans: 4.6, tol: 0.3, inv: true,
+      { q: "REVERSE-DCF / REQUIRED GROWTH (bagi yang nekat BUY): g berapa agar target = Rp5.000? (%)", ans: 4.6, tol: 0.3, inv: true,
         why: "g tersirat 4,65% adalah batas impas valuasi — pertumbuhan FCFF 4,65% selamanya yang membuat target = harga Rp5.000. Untuk properti siklikal yang labanya tidak jadi kas, asumsi itu agresif dan tidak didukung bukti (bandingkan: g 3% yang dipakai di DCF; pertumbuhan ekonomi jangka panjang ±5%) — jadi thesis BUY tidak punya margin: PASS. Invalidasi yang bisa diamati: CFO tetap jauh di bawah laba, atau g terealisasi bertahun-tahun di bawah 4,65%." }
     ]
   }
@@ -108,23 +108,63 @@ function openStock(k){
 document.getElementById("to-thesis").addEventListener("click", function(){ show("step-thesis"); });
 var pitchBtns = document.querySelectorAll("#pitch-btns .id-opt");
 
-/* Rubrik substansi Step 3 (gap G-1 ronde 6): panjang minimum 20 karakter tidak
-   membuktikan isi — "bisnisnya bagus sekali" bisa lolos 20 karakter tanpa satu
-   angka pun. Setiap kolom harus memuat ANGKA yang bisa diuji komite:
-   - bull: target/upside numerik (angka + satuan: %, Rp, miliar, poin, "→", x)
-   - risk: dampak terkuantifikasi — angka + satuan dampak (%, Rp, miliar, pp, bps)
-   - inv: pemicu spesifik yang teramati — angka (harga/level/%) yang memicu JUAL
-   Fungsi murni (tanpa DOM) agar bisa diuji di Node. Skor 3+2+3+2=10 dan gerbang
-   PASS ≥7 + keputusan benar TIDAK berubah: rubrik ini gerbang masuk komite
-   (seperti cek panjang) + ditampilkan kembali di vonis sebagai bukti. */
+/* Rubrik substansi Step 3 (gap G-1 ronde 6; diperketat ronde 8 S4):
+   panjang minimum 20 karakter tidak membuktikan isi — "bisnisnya bagus
+   sekali" bisa lolos 20 karakter tanpa satu angka pun. Ronde 8 membuktikan
+   cek lama (ada digit + ada satuan) diakali teks berangka kosong:
+   "bagus 1x" / "risiko 1 Rp" / "harga 1 Rp" semuanya LOLOS. Maka tiap
+   kolom kini divalidasi POLA, bukan sekadar keberadaan angka:
+   - bull: angka + satuan DAN (perubahan berarah "18%→22%" ATAU "Rp…"
+     ATAU kata konteks target/upside/naik/turun + "%") — "1% saja" ditolak
+   - risk: angka PENYEBAB dan angka DAMPAK (min. 2 angka + satuan +
+     "→" / "Rp" / "target") — "risiko 1 Rp" ditolak
+   - inv: kata pemicu yang teramati (turun/naik/menyentuh/menembus/di
+     bawah/di atas/≥/≤/…) terhubung angka + satuan — "harga 1 Rp" ditolak
+   Fungsi murni (tanpa DOM) agar bisa diuji di Node. Skor 3+2+3+2=10 dan
+   gerbang PASS ≥7 + keputusan benar TIDAK berubah: rubrik ini gerbang
+   masuk komite (seperti cek panjang) + ditampilkan kembali di vonis
+   sebagai bukti. */
 function substanceChecks(bull, risk, inv){
   var hasNum = function(s){ return /\d/.test(s); };
-  var hasUnit = function(s){ return /(%|\bRp|miliar|juta|poin|persen|→|pp(?![a-z])|bps(?![a-z])|x(?![a-z0-9]))/i.test(s); };
-  return {
-    bull: hasNum(bull) && hasUnit(bull),
-    risk: hasNum(risk) && hasUnit(risk),
-    inv: hasNum(inv) && hasUnit(inv)
-  };
+  var hasUnit = function(s){ return /(%|\bRp|miliar|juta|poin|persen|kuartal|→|pp(?![a-z])|bps(?![a-z])|x(?![a-z0-9]))/i.test(s); };
+  var bullOk = hasNum(bull) && hasUnit(bull) &&
+    (/\d\s*→\s*\d/.test(bull) || /\bRp\b/i.test(bull) ||
+     (/(target|upside|naik|turun|tumbuh|margin|pangsa|pendapatan|penjualan)\b/i.test(bull) && /%/.test(bull)));
+  var riskNums = (risk.match(/\d[\d.,]*/g) || []).length;
+  var riskOk = riskNums >= 2 && hasUnit(risk) &&
+    (/→/.test(risk) || /\bRp\b/i.test(risk) || /target/i.test(risk));
+  var invOk = hasNum(inv) && hasUnit(inv) &&
+    /(turun|naik|menyentuh|menembus|jatuh|sentuh|di\s*bawah|di\s*atas|≤|≥|>=|<=|kurang\s*dari|lebih\s*dari)/i.test(inv);
+  return { bull: bullOk, risk: riskOk, inv: invOk };
+}
+/* Ronde 8 S5 — I1 §1 mensyaratkan 3 risiko terbesar, masing-masing
+   dengan dampak ke target price. Simulator menguji ketiganya: textarea
+   risiko wajib memuat 3 poin bernomor (1./2./3. atau 1)/2)/3)). */
+function hasThreeNumberedRisks(s){
+  return /1\s*[.)]/.test(s) && /2\s*[.)]/.test(s) && /3\s*[.)]/.test(s);
+}
+/* Ronde 8 S6 — metode valuasi wajib terikat input utamanya (checklist
+   per metode, I2). Memilih DDM lalu menulis narasi DCF = tidak lolos:
+   bull case harus menyebut minimal satu input utama metode yang dipilih.
+   Fungsi murni (tanpa DOM) agar bisa diuji di Node. */
+var METHOD_INPUTS = {
+  dcf:  { label: "DCF (FCFF)",
+          need: "FCFF, WACC, g, net debt, saham beredar",
+          hint: "DCF: sebutkan input utamanya di bull case — FCFF, WACC, g, net debt, dan saham beredar (mis. \"FCFF Rp210 M tumbuh 4%, WACC 9,5%\"). Target harus bisa direplikasi dari input ini.",
+          re: /FCFF|WACC/i },
+  ddm:  { label: "DDM / Residual income",
+          need: "dividen, payout, required return",
+          hint: "DDM: sebutkan dividen/payout dan required return di bull case (mis. \"dividen payout 45% konsisten, required return 10%\").",
+          re: /dividen|payout|required return/i },
+  mult: { label: "Multiples",
+          need: "metrik, kelipatan, dasar peer/siklus",
+          hint: "Multiples: sebutkan metrik, kelipatan, dan dasar peer/siklus di bull case (mis. \"P/E 10x vs peer 12x\").",
+          re: /P\/E|EV\/EBITDA|kelipatan|peer/i }
+};
+function methodCheck(method, bull){
+  var m = METHOD_INPUTS[method];
+  if(!m) return { ok: false, hint: "Pilih metode valuasi." };
+  return { ok: m.re.test(bull || ""), hint: m.hint };
 }
 pitchBtns.forEach(function(btn){
   btn.addEventListener("click", function(){
@@ -133,9 +173,16 @@ pitchBtns.forEach(function(btn){
   });
 });
 
+/* Ronde 8 S6 — checklist input utama metode, tampil dinamis di Step 3. */
+document.getElementById("t-method").addEventListener("change", function(){
+  var m = METHOD_INPUTS[this.value];
+  var h = document.getElementById("method-hint");
+  if(h) h.textContent = m ? ("Checklist " + m.label + ": " + m.need + ".") : "Pilih metode — checklist input utama muncul di sini.";
+});
+
 document.getElementById("to-committee").addEventListener("click", function(){
   if(!decision){ alert("Pilih keputusan dulu (BUY / HOLD / PASS)."); return; }
-  var target = parseIDNumber(document.getElementById("t-target").value,false);
+  var target = parseIDNumber(document.getElementById("t-target").value);
   var targetWarn = parseIDNumber.lastWarning;
   var method = document.getElementById("t-method").value;
   var bull = document.getElementById("t-bull").value.trim();
@@ -144,11 +191,14 @@ document.getElementById("to-committee").addEventListener("click", function(){
   if(isNaN(target)||target<=0){ alert(isNaN(target)?("Target price tidak bisa dibaca: "+(targetWarn||"format angka tidak dikenal.")):"Isi target price (angka lebih dari 0)."); return; }
   if(!method){ alert("Pilih metode valuasi."); return; }
   if(bull.length<20){ alert("Tulis bull case yang serius (min. 20 karakter)."); return; }
-  if(risk.length<20){ alert("Tulis risiko utama + dampaknya (min. 20 karakter)."); return; }
+  if(risk.length<20){ alert("Tulis 3 risiko terbesar + dampaknya (min. 20 karakter)."); return; }
+  if(!hasThreeNumberedRisks(risk)){ alert("Risiko wajib 3 poin BERNOMOR (I1 §1: 3 risiko terbesar, masing-masing dengan dampak ke target) — mis. \"1. Daya beli turun 10% → target Rp1.900; 2. Margin EBIT turun >1,5pp → re-hitung target; 3. …\". Satu risiko utama saja tidak cukup."); return; }
   if(inv.length<20){ alert("Tulis invalidasi yang spesifik — angka/kejadian yang membuatmu JUAL (min. 20 karakter)."); return; }
+  var mc = methodCheck(method, bull);
+  if(!mc.ok){ alert("Metode dan thesis tidak terikat: "+mc.hint); return; }
   var sub = substanceChecks(bull, risk, inv);
-  if(!sub.bull){ alert("Bull case butuh ANGKA yang bisa diuji — target, upside %, atau level (mis. \"pangsa pasar 18%→22% dalam 3 tahun\"). Narasi tanpa angka tidak lolos komite."); return; }
-  if(!sub.risk){ alert("Risiko butuh DAMPAK TERUKUR — angka + satuan (mis. \"daya beli turun 10% → target turun ke Rp1.900\"). Seberapa besar dampaknya, dalam angka?"); return; }
+  if(!sub.bull){ alert("Bull case butuh ANGKA yang bisa diuji — target/upside % atau perubahan berarah (mis. \"pangsa pasar 18%→22% dalam 3 tahun\" atau \"target Rp2.450, upside 36%\"). Narasi tanpa angka tidak lolos komite."); return; }
+  if(!sub.risk){ alert("Risiko butuh DAMPAK TERUKUR per poin — angka PENYEBAB dan angka DAMPAK (mis. \"1. Daya beli turun 10% → target turun ke Rp1.900\"). Seberapa besar dampaknya, dalam angka?"); return; }
   if(!sub.inv){ alert("Invalidasi butuh PEMICU SPESIFIK yang teramati — harga/level/angka (mis. \"FCFF turun ≥20%\" atau \"harga menyentuh Rp1.400\"). \"Bila keadaan memburuk\" bukan pemicu."); return; }
   var s = STOCKS[cur], h = "";
   s.comm.forEach(function(cq,i){
@@ -170,7 +220,7 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   var kLabel = {buy:"BUY",hold:"HOLD",pass:"PASS"}[s.key.decision];
   fb.push("<b>Keputusan Anda: "+dLabel+"</b> — kunci komite: <b>"+kLabel+"</b> ("+dScore+"/3).<br>"+s.key.why);
   /* 2. target price (2) */
-  var target = parseIDNumber(document.getElementById("t-target").value,false);
+  var target = parseIDNumber(document.getElementById("t-target").value);
   var targetWarn = parseIDNumber.lastWarning;
   var tScore = (!isNaN(target) && Math.abs(target-s.key.target) <= s.key.tol) ? 2 : 0;
   score += tScore;
@@ -186,7 +236,7 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   var cScore = 0, cFb = [];
   for(var i=0;i<3;i++){
     var cq = s.comm[i];
-    var v = parseIDNumber(document.getElementById("cq"+i).value, true);
+    var v = parseIDNumber(document.getElementById("cq"+i).value);
     var vWarn = parseIDNumber.lastWarning;
     var exp = cq.ans, ok;
     if(cq.dyn && !isNaN(target) && target>0){
@@ -201,12 +251,12 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   fb.push("<b>Bear challenges ("+cScore+"/3):</b><br>• "+cFb.join("<br>• "));
   /* 4. Q4 (2) — invalidasi (A/C) atau batas beli (B) */
   var iq = s.comm[3];
-  var iv = parseIDNumber(document.getElementById("cq3").value, true);
+  var iv = parseIDNumber(document.getElementById("cq3").value);
   var ivWarn = parseIDNumber.lastWarning;
   var iOk = !isNaN(iv) && Math.abs(iv-iq.ans) <= iq.tol;
   var iScore = iOk ? 2 : 0;
   score += iScore;
-  var iLabel = iq.q.indexOf("BATAS BELI")===0 ? "Batas beli" : "Invalidasi";
+  var iLabel = iq.q.indexOf("BATAS BELI")===0 ? "Batas beli" : (iq.q.indexOf("REVERSE-DCF")===0 ? "Reverse-DCF / required growth" : "Invalidasi");
   fb.push("<b>"+iLabel+" ("+iScore+"/2):</b> "+(iOk?"✓":"✗")+" — "+(isNaN(iv)?("Jawaban tidak terbaca: "+ivWarn+" "):"")+iq.why);
   /* Gerbang keputusan: LULUS wajib skor ≥7 DAN keputusan benar. Tanpa gerbang ini,
      keputusan salah + sisa sempurna = 7/10 tetap lolos (review Instinct 2026-11-05). */

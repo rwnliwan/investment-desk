@@ -58,6 +58,13 @@
         var labels = box.querySelectorAll(".opt");
         for(var j=0;j<labels.length;j++){
           var o = +labels[j].getAttribute("data-o");
+          /* Ronde 8 N5 — bersihkan penanda hasil lama SEBELUM menandai yang
+             baru: tanpa ini, label yang dulu benar tetap membawa class
+             right (bahkan right+wrong sekaligus) bila jawaban diubah lalu
+             submit lagi. Skor dihitung ulang dengan benar; yang rusak
+             hanya tampilan. */
+          labels[j].classList.remove("right");
+          labels[j].classList.remove("wrong");
           if(o === Q[i].ans) labels[j].classList.add("right");
           else if(o === picked) labels[j].classList.add("wrong");
         }

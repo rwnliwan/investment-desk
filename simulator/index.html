@@ -43,7 +43,7 @@
   <div class="id-card" id="step-thesis" style="display:none">
     <h2>Langkah 3 — Thesis Anda (1 halaman)</h2>
     <p class="id-sub">Thesis tanpa angka yang bisa salah = opini. Tulis yang bisa diuji komite.</p>
-    <p class="id-sub"><b>Rubrik substansi (komite menolak thesis tanpa angka):</b> bull case wajib memuat angka target/upside; risiko wajib memuat dampak terukur (angka + satuan); invalidasi wajib memuat pemicu spesifik (harga/level/%). Panjang saja tidak cukup — 20 karakter tanpa angka tetap ditolak.</p>
+    <p class="id-sub"><b>Rubrik substansi (komite menolak thesis tanpa angka):</b> bull case wajib memuat angka target/upside atau perubahan berarah; risiko wajib memuat 3 risiko bernomor, masing-masing dengan angka penyebab DAN angka dampak; invalidasi wajib memuat pemicu spesifik yang teramati (harga/level/%). Metode valuasi wajib terikat input utamanya (lihat checklist di bawah dropdown metode). Panjang saja tidak cukup — 20 karakter tanpa angka tetap ditolak.</p>
     <div class="id-grid">
       <div class="id-field"><label>Target price (Rp)</label>
         <input id="t-target" inputmode="decimal" placeholder="mis. 2.000">
@@ -53,12 +53,14 @@
           <option value="dcf">DCF (FCFF)</option>
           <option value="ddm">DDM / Residual income</option>
           <option value="mult">Multiples</option></select>
-        <div class="id-hint">Metode mengikuti emiten (I2).</div></div>
+        <div class="id-hint" id="method-hint">Pilih metode — checklist input utama muncul di sini.</div></div>
     </div>
     <div class="id-field" style="margin-top:.8rem"><label>Bull case (2–3 poin, masing-masing dengan angka)</label>
-      <textarea id="t-bull" placeholder="mis. Pangsa pasar 18%→22% dalam 3 tahun, didorong…"></textarea></div>
-    <div class="id-field" style="margin-top:.8rem"><label>Risiko utama + dampak ke target</label>
-      <textarea id="t-risk" placeholder="mis. Daya beli turun 10% → target turun ke Rp…"></textarea></div>
+      <textarea id="t-bull" placeholder="mis. FCFF tumbuh 4% (WACC 9,5%) — pangsa pasar 18%→22% dalam 3 tahun"></textarea>
+      <div class="id-hint">Sebutkan input utama metodemu di sini (DCF: FCFF/WACC; DDM: dividen/payout; Multiples: metrik/kelipatan vs peer) — komite menolak thesis yang metodenya tidak terikat angka.</div></div>
+    <div class="id-field" style="margin-top:.8rem"><label>Risiko — 3 risiko terbesar, masing-masing + dampak ke target (I1 §1)</label>
+      <textarea id="t-risk" placeholder="mis. 1. Daya beli turun 10% → target Rp1.900; 2. Margin EBIT turun >1,5pp → re-hitung target; 3. Utang naik 50% → WACC naik"></textarea>
+      <div class="id-hint">Simulator menguji 3 risiko bernomor (I1 §1) — bukan 1 risiko utama saja. Masing-masing dengan angka penyebab DAN angka dampak.</div></div>
     <div class="id-field" style="margin-top:.8rem"><label>Invalidasi — saya JUAL bila… (angka/kejadian spesifik, ditulis SEBELUM beli)</label>
       <textarea id="t-inv" placeholder="mis. FCFF turun ≥20% dari Rp… M, atau harga menyentuh Rp…"></textarea>
       <div class="id-hint">I1: invalidasi ditulis sebelum membeli — komite menguji apakah angkamu spesifik (bukan "bila keadaan memburuk").</div></div>
@@ -73,7 +75,7 @@
 
   <div class="id-card" id="step-committee" style="display:none">
     <h2>Langkah 4 — Bear challenges komite</h2>
-    <p class="id-sub">Komite menyerang thesis-mu. Format Indonesia: desimal pakai koma (36,1); ribuan boleh pakai titik (2.500) atau tanpa titik (2500), dan 2.500,00 juga bisa. Harga di modul ditulis "Rp2.062" (titik = pemisah ribuan) — ketik 2062 atau 2.062, keduanya dibaca 2062. Format yang tidak bisa dibaca ditolak dengan pesan alasan — tidak pernah ditebak diam-diam. Pertanyaan terakhir = invalidasi (A dan C) atau batas beli (B).</p>
+    <p class="id-sub">Komite menyerang thesis-mu. Format Indonesia: desimal pakai koma (36,1); ribuan boleh pakai titik (2.500) atau tanpa titik (2500), dan 2.500,00 juga bisa. Harga di modul ditulis "Rp2.062" (titik = pemisah ribuan) — ketik 2062 atau 2.062, keduanya dibaca 2062. Format yang tidak bisa dibaca ditolak dengan pesan alasan — tidak pernah ditebak diam-diam. Pertanyaan terakhir = invalidasi (A), batas beli (B), atau reverse-DCF (C).</p>
     <div id="comm-qs"></div>
     <div class="id-btnrow"><button class="id-btn apricot" id="to-verdict">Minta vonis komite</button></div>
   </div>
