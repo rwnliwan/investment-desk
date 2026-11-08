@@ -31,7 +31,7 @@ var ID_QA=[
  a:"Variant perception = pandangan yang berbeda dari konsensus DAN benar. Contoh: pasar melihat margin tertekan siklikal, saya melihat bauran produk permanen bergeser ke premium (bukti: 3 kuartal berturut-turut).",
  r:"Rubrik: harus ada 'konsensus bilang X, saya bilang Y karena bukti Z'. Tanpa ini = bukan thesis, cuma opini."},
 {cat:"STOCK PITCH",q:"Apa yang bisa membuat thesis-mu salah?",
- a:"Jawab dengan invalidasi tertulis: angka spesifik (mis. pangsa pasar turun 2 kuartal, FCFF −20%) — bukan 'risiko makro'. Lalu: dampaknya ke target price.",
+ a:"Jawab dengan invalidasi tertulis: angka spesifik (mis. same-store sales turun 2 kuartal, FCFF turun ≥20%, atau harga menyentuh Rp1.400) — bukan 'risiko makro'. Lalu: dampaknya ke target price.",
  r:"Rubrik: jawaban generik ('kondisi ekonomi') = gagal. Spesifik + terukur = lolos."},
 {cat:"STOCK PITCH",q:"Saham ini turun 20% setelah kamu beli. Apa yang kamu lakukan?",
  a:"Buka jurnal (I3): apakah invalidasi terpicu? Tidak → thesis masih hidup → pertimbangkan tambah (bila MOS makin besar). Ya → jual, catat 1 kalimat alasannya. Tidak ada opsi 'tunggu dan berharap'.",

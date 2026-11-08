@@ -20,7 +20,7 @@ var STOCKS = {
       "Bauran produk premium naik 15% → 25% pendapatan (margin mengembang).",
       "Manajemen: founder-led, insider ownership 32%."],
     key: { decision: "buy", target: 2450, tol: 60,
-           why: "Target DCF Rp2.450 vs Rp1.800 = upside 36%. Bisnis defensif, kas terprediksi, MOS 15–20% sudah cukup — 36% sangat memadai." },
+           why: "Target DCF Rp2.450 vs Rp1.800 = upside 36,1%; MOS 26,5% — di atas ambang 15–20% untuk bisnis defensif dengan kas terprediksi — sangat memadai." },
     comm: [
       { q: "Upside dari TARGET-MU vs harga pasar Rp1.800? (%)", dyn: "up", tol: 2, why: "Upside = (target-mu − 1.800) ÷ 1.800. Komite menguji matematikamu, bukan hafalan." },
       { q: "P/E di harga pasar? (x) — EPS Rp180", ans: 10, tol: 0.5, why: "1.800 ÷ 180 = 10x — murah untuk konsumer defensif." },
@@ -42,7 +42,7 @@ var STOCKS = {
       "Tidak ada keunggulan biaya vs peers — price taker murni.",
       "Dividen dipotong 2x dalam 5 tahun mengikuti siklus."],
     key: { decision: "hold", target: 3300, tol: 60,
-           why: "Target Rp3.300 vs Rp3.200 = upside 3,1% — tidak cukup untuk siklikal (butuh MOS 30%+). Bukan thesis jual (bisnis tidak rusak), tapi bukan thesis beli." },
+           why: "Target Rp3.300 vs Rp3.200 = upside 3,1% — tidak cukup untuk siklikal (butuh MOS 30%+). Bukan thesis jual (bisnis tidak rusak), tapi bukan thesis beli. Upside 3,1% ini memicu review jual (I3 §1 alasan 2) — review, bukan jual otomatis: hasil review, bisnis tidak rusak, jadi tahan, jangan tambah." },
     comm: [
       { q: "Upside dari TARGET-MU vs harga pasar Rp3.200? (%)", dyn: "up", tol: 1, why: "Upside = (target-mu − 3.200) ÷ 3.200." },
       { q: "Bila FCFF turun 12,5% (komoditas −20%), target barunya? (Rp)", ans: 2800, tol: 60, why: "FCFF 350 → EV 3.967 → equity 3.167 → ÷1.131 = Rp2.800." },
@@ -70,7 +70,7 @@ var STOCKS = {
       { q: "CFO rata-rata 3 tahun bila NI 348 dan CFO/NI 40%? (Rp miliar)", ans: 139, tol: 5, why: "348 × 0,4 = 139,2." },
       { q: "Selisih NI − CFO = ? (Rp miliar) — selisih laba dan kas yang perlu ditelusuri", ans: 209, tol: 8, why: "348 − 139 = 209. Ini selisih SATU periode — belum membuktikan kas tidak pernah diterima (bisa perubahan modal kerja/timing). Yang perlu ditelusuri: piutang/persediaan menumpuk atau revenue recognition agresif." },
       { q: "INVALIDASI (bagi yang nekat BUY): g berapa agar target = Rp5.000? (%)", ans: 4.6, tol: 0.3, inv: true,
-        why: "Butuh g 4,65% perpetuitas untuk properti siklikal — tidak masuk akal. Thesis BUY mati di sini." }
+        why: "g tersirat 4,65% adalah batas impas valuasi — pertumbuhan FCFF 4,65% selamanya yang membuat target = harga Rp5.000. Untuk properti siklikal yang labanya tidak jadi kas, asumsi itu agresif dan tidak didukung bukti (bandingkan: g 3% yang dipakai di DCF; pertumbuhan ekonomi jangka panjang ±5%) — jadi thesis BUY tidak punya margin: PASS. Invalidasi yang bisa diamati: CFO tetap jauh di bawah laba, atau g terealisasi bertahun-tahun di bawah 4,65%." }
     ]
   }
 };

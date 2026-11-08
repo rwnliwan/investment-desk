@@ -38,8 +38,8 @@
   <div class="tblwrap"><table class="stmt">
     <thead><tr><th>Alasan</th><th>Contoh</th><th>Tes</th></tr></thead>
     <tbody>
-      <tr><td><strong>1. Thesis rusak</strong></td><td>Invalidasi I1 terpicu: pangsa pasar turun 2 kuartal, FCFF −20%</td><td>Sudah ditulis SEBELUM beli — bukan alasan yang dikarang setelah harga turun</td></tr>
-      <tr><td><strong>2. Harga mencapai nilai</strong></td><td>Target Rp2.062 tercapai, atau upside tersisa &lt;10% (harga ≳ Rp1.875) — dua pemicu berbeda, lihat §4</td><td>Ada target tertulis; bukan "kayaknya sudah mahal"</td></tr>
+      <tr><td><strong>1. Thesis rusak</strong></td><td>Invalidasi I1 terpicu: same-store sales turun 2 kuartal berturut-turut, FCFF turun ≥20%, atau harga menyentuh Rp1.400</td><td>Sudah ditulis SEBELUM beli — bukan alasan yang dikarang setelah harga turun</td></tr>
+      <tr><td><strong>2. Harga mencapai nilai</strong></td><td>Target Rp2.062 tercapai, atau upside tersisa &lt;10% (harga ≳ Rp1.875) — dua pemicu berbeda, lihat §4; keduanya memicu <em>review</em> jual, bukan jual otomatis (lihat simulator B: upside 3,1% memicu review, hasil review-nya tahan)</td><td>Ada target tertulis; bukan "kayaknya sudah mahal"</td></tr>
       <tr><td><strong>3. Ada yang lebih baik</strong></td><td>Kesempatan baru dengan upside 40% vs posisi lama tersisa 8%</td><td>Perbandingan thesis-vs-thesis, bukan bosan</td></tr>
     </tbody>
   </table></div>
@@ -57,7 +57,7 @@
   </ol>
   <h3>Contoh hitung — thesis Sinar Ritel (I1)</h3>
   <p><span class="ilus" style="display:inline-block">ILUSTRATIF — EMITEN FIKTIF</span></p>
-  <p>Portfolio <strong>Rp100 jt</strong> (ilustratif). Thesis Sinar Ritel — emiten yang sama dengan lembar valuasi kanonis I2 §4 (FCFF Rp150 M, target Rp2.062) dan thesis contoh I1 §2: beli di Rp1.500, invalidasi harga di Rp1.400 dan pemicu fundamental FCFF −20% (target ≈Rp1.568 — MOS tinggal ≈4%), target Rp2.062. Aturan yang dipakai: <strong>anggaran risiko 1% portfolio per thesis pada harga invalidasi Rp1.400</strong> — bukan "beli sekian persen karena yakin", melainkan "bila saya salah dan keluar tepat di invalidasi, saya rugi sekian".</p>
+  <p>Portfolio <strong>Rp100 jt</strong> (ilustratif). Thesis Sinar Ritel — emiten yang sama dengan lembar valuasi kanonis I2 §4 (FCFF Rp150 M, target Rp2.062) dan thesis contoh I1 §2: beli di Rp1.500, invalidasi harga di Rp1.400 dan pemicu fundamental FCFF turun ≥20% (target ≈Rp1.568 — MOS tinggal ≈4%), target Rp2.062. Aturan yang dipakai: <strong>anggaran risiko 1% portfolio per thesis pada harga invalidasi Rp1.400</strong> — bukan "beli sekian persen karena yakin", melainkan "bila saya salah dan keluar tepat di invalidasi, saya rugi sekian".</p>
   <div class="tblwrap"><table class="stmt">
     <thead><tr><th>Langkah</th><th class="num">Hitungan</th><th class="num">Hasil</th></tr></thead>
     <tbody>
@@ -70,7 +70,7 @@
     </tbody>
   </table></div>
   <p>Cek batas: <strong>15% tepat di batas atas aturan 10–15%</strong> — ukuran ini lolos, tapi tidak ada ruang menambah. Bila thesis-nya spekulatif (keyakinan rendah, aturan 2: setengah posisi): 5.000 lembar, modal Rp7,5 jt (7,5%), risiko Rp500 rb, untung bila target Rp2,81 jt.</p>
-  <p><strong>Kesalahan umum: sizing dari upside.</strong> Upside 37% bukan alasan membeli 37% portfolio — upside tidak bicara soal seberapa besar kerugianmu bila salah. Ukuran posisi mengikuti <strong>jarak ke invalidasi</strong> (risiko), bukan potensi naik. Thesis dengan upside 40% tapi invalidasi Rp100 di bawah harga beli adalah posisi KECIL, bukan besar.</p>
+  <p><strong>Kesalahan umum: sizing dari upside.</strong> Upside 37% bukan alasan membeli 37% portfolio — upside tidak bicara soal seberapa besar kerugianmu bila salah. Ukuran posisi mengikuti <strong>jarak ke invalidasi</strong> (risiko), bukan potensi naik. Rumusnya: jumlah lembar = min(anggaran risiko ÷ jarak per saham, batas modal ÷ harga beli). Pada contoh di atas, jarak Rp100 yang sama justru menghasilkan posisi <strong>maksimum</strong> yang diizinkan — Rp1 jt ÷ Rp100 = 10.000 lembar → Rp15 jt = 15% portfolio, tepat di batas atas aturan 10–15% — bukan posisi kecil. Jarak nominal saja tidak menentukan ukuran: anggaran risiko dan batas modal-lah yang menentukannya.</p>
   <p>Catatan jujur: sizing tidak membuat thesis benar — ia hanya memastikan thesis yang salah tidak membunuhmu.</p>
   <p><strong>Yang tidak dijamin angka 1% itu: eksekusi.</strong> Anggaran Rp1 jt berlaku bila kamu benar-benar keluar di Rp1.400. Bila harga gap semalam ke Rp1.300 (berita buruk sebelum buka), kerugianmu 10.000 × (1.500 − 1.300) = Rp2 jt = 2% portfolio — sebelum biaya broker dan slippage. Saham yang tidak likuid memperbesar selisihnya: order jual besarmu sendiri bisa menekan harga. Jadi 1% adalah anggaran risiko pada harga invalidasi, bukan batas kerugian yang terjamin.</p>
 </section>
@@ -100,7 +100,7 @@
       <tr><td>Harga menyentuh invalidasi Rp1.400</td><td><strong>Jual — tanpa debat</strong> (invalidasi ditulis sebelum beli)</td></tr>
       <tr><td>Harga bergerak ±20% dari harga beli Rp1.500 (tanpa berita fundamental)</td><td>Review: apakah pasar tahu sesuatu yang kamu lewatkan?</td></tr>
       <tr><td rowspan="6"><strong>Fundamental</strong></td><td>Same-store sales turun 2 kuartal berturut-turut</td><td>Jual (invalidasi I1)</td></tr>
-      <tr><td>FCFF turun &gt;20% dari Rp150 M (target jatuh ke ≈Rp1.568 — MOS tinggal ≈4%)</td><td>Jual (invalidasi I1)</td></tr>
+      <tr><td>FCFF turun ≥20% dari Rp150 M (target jatuh ke ≈Rp1.568 — MOS tinggal ≈4%)</td><td>Jual (invalidasi I1)</td></tr>
       <tr><td>Margin EBIT turun &gt;1,5pp</td><td>Re-hitung target (risiko I1)</td></tr>
       <tr><td>Dividen dipotong / payout berubah</td><td>Re-hitung thesis dividen</td></tr>
       <tr><td>Net debt naik &gt;50% (Rp400 M → Rp600 M)</td><td>Re-hitung WACC (I2 §6) dan target</td></tr>

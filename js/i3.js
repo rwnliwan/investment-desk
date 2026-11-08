@@ -2,7 +2,7 @@
 var ID_QUIZ=[
  {q:"Alasan jual yang SAH adalah…",
   opts:["Harga turun 15% dari harga beli","Thesis rusak — invalidasi yang ditulis sebelum beli terpicu","Butuh uang untuk keperluan lain","Bosan karena harga stagnan 6 bulan"],
-  ans:1,why:"Tiga alasan sah: thesis rusak, harga mencapai nilai, ada yang lebih baik. Sisanya emosi atau masalah kas."},
+  ans:1,why:"Tiga alasan sah: thesis rusak, harga mencapai nilai, ada yang lebih baik. Sisanya emosi atau masalah kas. Contoh invalidasi Sinar Ritel (I1): same-store sales turun 2 kuartal, FCFF turun ≥20% (target ≈Rp1.568), atau harga menyentuh Rp1.400."},
  {q:"\"Profit taking\" 20% padahal target belum tercapai adalah…",
   opts:["Disiplin yang baik","Alasan jual yang sah","Keputusan tanpa thesis — tidak sah","Wajib bila sudah untung"],
   ans:2,why:"Salah — yang tidak sah adalah jual tanpa pemicu tertulis. Menjual saat upside tersisa <10% (harga ≳Rp1.875) atau saat target Rp2.062 tercapai adalah keputusan ber-thesis: kedua pemicu itu tertulis di §1 alasan 2. Yang tidak sah: jual hanya karena 'sudah untung 20%'."},
