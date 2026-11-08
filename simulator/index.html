@@ -58,6 +58,32 @@
     <div class="id-field" style="margin-top:.8rem"><label>Bull case (2–3 poin, masing-masing dengan angka)</label>
       <textarea id="t-bull" placeholder="mis. FCFF tumbuh 4% (WACC 9,5%) — pangsa pasar 18%→22% dalam 3 tahun"></textarea>
       <div class="id-hint">Sebutkan input utama metodemu di sini (DCF: FCFF/WACC; DDM: dividen/payout; Multiples: metrik/kelipatan vs peer) — komite menolak thesis yang metodenya tidak terikat angka.</div></div>
+    <div class="id-field" style="margin-top:.8rem"><label>Angka kunci metode (opsional — untuk cek konsistensi)</label>
+      <div class="id-hint" style="margin-bottom:.5rem">Isi angka yang sama dengan yang kamu tulis di bull case. Komite memeriksa apakah targetmu bisa direplikasi dari angka ini dan apakah angka di bull case, risiko, dan invalidasi selaras satu sama lain. Cek ini hanya memberi <b>peringatan</b> — tidak memblokir dan tidak mengubah skor maupun gerbang LULUS.</div>
+      <div id="inputs-dcf" style="display:none">
+        <div class="id-grid">
+          <div class="id-field"><label>FCFF (Rp miliar)</label><input id="in-fcff" inputmode="decimal" placeholder="mis. 210"></div>
+          <div class="id-field"><label>WACC (%)</label><input id="in-wacc" inputmode="decimal" placeholder="mis. 9,5"></div>
+          <div class="id-field"><label>g perpetuitas (%)</label><input id="in-g" inputmode="decimal" placeholder="mis. 4"></div>
+          <div class="id-field"><label>Net debt (Rp miliar)</label><input id="in-debt" inputmode="decimal" placeholder="mis. 600"></div>
+          <div class="id-field"><label>Saham beredar (juta)</label><input id="in-shares" inputmode="decimal" placeholder="mis. 1.375"></div>
+        </div>
+      </div>
+      <div id="inputs-mult" style="display:none">
+        <div class="id-grid">
+          <div class="id-field"><label>Metrik — EPS (Rp)</label><input id="in-eps" inputmode="decimal" placeholder="mis. 180"></div>
+          <div class="id-field"><label>Kelipatan — P/E atau EV/EBITDA (x)</label><input id="in-mult" inputmode="decimal" placeholder="mis. 10"></div>
+        </div>
+      </div>
+      <div id="inputs-ddm" style="display:none">
+        <div class="id-grid">
+          <div class="id-field"><label>Dividen per saham (Rp)</label><input id="in-div" inputmode="decimal" placeholder="mis. 81"></div>
+          <div class="id-field"><label>Payout (%)</label><input id="in-payout" inputmode="decimal" placeholder="mis. 45"></div>
+          <div class="id-field"><label>Required return (%)</label><input id="in-req" inputmode="decimal" placeholder="mis. 10"></div>
+        </div>
+      </div>
+      <div class="id-hint" id="inputs-none">Pilih metode valuasi dulu — kolom angka kuncinya muncul di sini.</div>
+    </div>
     <div class="id-field" style="margin-top:.8rem"><label>Risiko — 3 risiko terbesar, masing-masing + dampak ke target (I1 §1)</label>
       <textarea id="t-risk" placeholder="mis. 1. Daya beli turun 10% → target Rp1.900; 2. Margin EBIT turun >1,5pp → re-hitung target; 3. Utang naik 50% → WACC naik"></textarea>
       <div class="id-hint">Simulator menguji 3 risiko bernomor (I1 §1) — bukan 1 risiko utama saja. Masing-masing dengan angka penyebab DAN angka dampak.</div></div>
@@ -75,7 +101,8 @@
 
   <div class="id-card" id="step-committee" style="display:none">
     <h2>Langkah 4 — Bear challenges komite</h2>
-    <p class="id-sub">Komite menyerang thesis-mu. Format Indonesia: desimal pakai koma (36,1); ribuan boleh pakai titik (2.500) atau tanpa titik (2500), dan 2.500,00 juga bisa. Harga di modul ditulis "Rp2.062" (titik = pemisah ribuan) — ketik 2062 atau 2.062, keduanya dibaca 2062. Format yang tidak bisa dibaca ditolak dengan pesan alasan — tidak pernah ditebak diam-diam. Pertanyaan terakhir = invalidasi (A), batas beli (B), atau reverse-DCF (C).</p>
+    <p class="id-sub">Komite menyerang thesis-mu. Format Indonesia: desimal pakai koma (36,1); ribuan boleh pakai titik (2.500) atau tanpa titik (2500), dan 2.500,00 juga bisa. Harga di modul ditulis "Rp2.062" (titik = pemisah ribuan) — ketik 2062 atau 2.062, keduanya dibaca 2062. Format yang tidak bisa dibaca ditolak dengan pesan alasan — tidak pernah ditebak diam-diam. Pertanyaan terakhir = invalidasi (A), batas beli (B), atau reverse-DCF (C); emiten B ditutup satu pertanyaan konseptual (batas beli ≠ pemicu jual).</p>
+    <div id="consistency-box"></div>
     <div id="comm-qs"></div>
     <div class="id-btnrow"><button class="id-btn apricot" id="to-verdict">Minta vonis komite</button></div>
   </div>

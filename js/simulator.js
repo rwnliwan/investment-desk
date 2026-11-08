@@ -49,7 +49,13 @@ var STOCKS = {
       { q: "P/E di harga pasar? (x) — EPS Rp300", ans: 10.7, tol: 0.5, why: "3.200 ÷ 300 = 10,7x — wajar, tidak murah." },
       { q: "BATAS BELI: harga beli MAKSIMUM dengan MOS 30% (siklikal)? (Rp)", ans: 2310, tol: 60,
         why: "MOS = (nilai − harga) ÷ nilai. MOS 30% → harga = 3.300 × 0,70 = Rp2.310. Ini batas untuk MEMBUKA posisi, bukan pemicu jual: di atas Rp2.310 kamu membayar tanpa buffer siklus — posisi yang sudah dimiliki tidak otomatis dijual di sini." }
-    ]
+    ],
+    /* Ronde 8 G3 — satu pertanyaan konseptual setelah Q4 B: jawaban angka
+       Rp2.310 bisa dijawab mekanis; yang diuji di sini adalah pemahaman
+       bahwa "batas beli" ≠ "pemicu jual". Konseptual (teks), di luar skor
+       10 — vonis dan gerbang PASS ≥7 + keputusan benar TIDAK berubah. */
+    concept: { q: "Bila sudah punya posisi dan harga naik di atas Rp2.310, apakah ini otomatis sinyal jual?", ans: "tidak",
+      why: "Tidak — Rp2.310 adalah batas untuk MEMBUKA posisi, bukan pemicu jual. Di atas Rp2.310 kamu membayar tanpa buffer siklus, jadi jangan buka posisi baru di sana; posisi yang sudah dimiliki tidak otomatis dijual di sini. Jual hanya bila invalidasi terpicu atau review jual (I3 §1) mendukungnya." }
   },
   C: {
     name: "PT Maju Properti", sector: "Properti",
@@ -166,6 +172,106 @@ function methodCheck(method, bull){
   if(!m) return { ok: false, hint: "Pilih metode valuasi." };
   return { ok: m.re.test(bull || ""), hint: m.hint };
 }
+/* Ronde 8 G2 — cek konsistensi ANTAR field thesis (lapisan di atas S4/S6):
+   S4 memvalidasi pola PER field (ada angka bermakna); S6 mengikat metode
+   ke input utamanya. Yang belum diperiksa: apakah angka-angka itu SELARAS
+   satu sama lain — target yang disebut di bull case vs target price yang
+   diketik, upside yang ditulis vs upside yang dihitung, target vs input
+   DCF / multiples / DDM yang diisi, dampak risiko vs target, invalidasi
+   vs target, dan input metode yang disebut di bull case vs yang diisi di
+   kolom terstruktur. Fungsi murni (tanpa DOM, tanpa fmtID) agar bisa
+   diuji di Node. Hasilnya PERINGATAN, BUKAN BLOKIR: ditampilkan di
+   Step 4 + vonis; skor 3+2+3+2=10 dan gerbang PASS ≥7 + keputusan benar
+   TIDAK berubah. Ambang longgar (±10% / 5pp / 1pp) supaya pembulatan
+   wajar tidak memicu peringatan. Angka "Rp… M / miliar / juta" (mis.
+   FCFF Rp210 M) BUKAN harga per saham — dikecualikan dari cek harga. */
+function _consFmt(v){
+  return String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+function _consRpNums(s){
+  /* Angka Rp per saham saja: "Rp2.450", "Rp1.900" — bukan "Rp210 M"
+     (FCFF jutaan) dan bukan komponen per saham ("Dividen Rp100",
+     "EPS Rp180") yang memang bukan harga/target. */
+  var out = [], m, re = /Rp\s*([0-9][0-9.,]*)\s*(M\b|miliar|juta)?/g;
+  while((m = re.exec(s || "")) !== null){
+    if(m[2]) continue;
+    if(/(dividen|eps|fcff|payout)\s*$/i.test((s || "").slice(Math.max(0, m.index - 20), m.index))) continue;
+    var v = m[1];
+    var n = (v.indexOf(",") >= 0) ? parseFloat(v.replace(/\./g, "").replace(",", ".")) : parseFloat(v.replace(/\./g, ""));
+    if(!isNaN(n)) out.push(n);
+  }
+  return out;
+}
+function _consPctAfter(s, kw){
+  var m = new RegExp(kw + "[^0-9]{0,25}([0-9]+[.,]?[0-9]*)\\s*%", "i").exec(s || "");
+  return m ? parseFloat(m[1].replace(",", ".")) : NaN;
+}
+function consistencyWarnings(o){
+  var warn = [];
+  var target = o.target, mkt = o.mkt;
+  if(isNaN(target) || target <= 0 || isNaN(mkt) || mkt <= 0) return warn;
+  /* 1. angka Rp di bull case vs target price (Rp harga pasar dikecualikan) */
+  _consRpNums(o.bull).forEach(function(v){
+    if(Math.abs(v - mkt) / mkt <= 0.02) return;
+    if(Math.abs(v - target) / target > 0.10)
+      warn.push("Bull case menyebut Rp" + _consFmt(v) + ", jauh dari target price Rp" + _consFmt(target) + " (lebih dari 10%) — angka mana yang benar?");
+  });
+  /* 2. upside/downside yang ditulis vs yang dihitung dari target-mu */
+  var up = _consPctAfter(o.bull, "upside");
+  if(!isNaN(up)){
+    var upCalc = (target - mkt) / mkt * 100;
+    if(Math.abs(up - upCalc) > 5)
+      warn.push("Bull case menulis upside " + up + "%, padahal dari target Rp" + _consFmt(target) + " vs harga Rp" + _consFmt(mkt) + " upside-nya " + upCalc.toFixed(1) + "% — hitung ulang.");
+  }
+  var down = _consPctAfter(o.bull, "downside");
+  if(!isNaN(down)){
+    var downCalc = (mkt - target) / mkt * 100;
+    if(Math.abs(down - downCalc) > 5)
+      warn.push("Bull case menulis downside " + down + "%, padahal dari target Rp" + _consFmt(target) + " vs harga Rp" + _consFmt(mkt) + " downside-nya " + downCalc.toFixed(1) + "% — hitung ulang.");
+  }
+  /* 3. DCF: target bisa direplikasi dari input terstruktur? */
+  if(o.method === "dcf" && [o.fcff, o.wacc, o.g, o.debt, o.shares].every(function(x){ return !isNaN(x); })
+      && o.wacc > o.g && o.shares > 0){
+    var ev = o.fcff * (1 + o.g / 100) / ((o.wacc - o.g) / 100);
+    var tgt = (ev - o.debt) / o.shares * 1000;
+    if(Math.abs(tgt - target) / target > 0.10)
+      warn.push("DCF dari input terstruktur (FCFF Rp" + _consFmt(o.fcff) + " M, WACC " + o.wacc + "%, g " + o.g + "%, net debt Rp" + _consFmt(o.debt) + " M, " + _consFmt(o.shares) + " jt saham) menghasilkan target Rp" + _consFmt(tgt) + ", bukan Rp" + _consFmt(target) + " — periksa input atau target-mu.");
+  }
+  /* 4. dampak risiko: target setelah risiko tidak boleh ≥ target awal */
+  var rm = /target[^0-9]{0,25}Rp\s*([0-9][0-9.,]*)/gi, m2;
+  while((m2 = rm.exec(o.risk || "")) !== null){
+    var rv = m2[1];
+    var rn = (rv.indexOf(",") >= 0) ? parseFloat(rv.replace(/\./g, "").replace(",", ".")) : parseFloat(rv.replace(/\./g, ""));
+    if(!isNaN(rn) && rn >= target)
+      warn.push("Dampak risiko menyebut target Rp" + _consFmt(rn) + " — sama/lebih tinggi dari target awal Rp" + _consFmt(target) + "; risiko seharusnya menurunkan target, bukan menaikkannya.");
+  }
+  /* 5. invalidasi: pemicu harga di atas target tidak konsisten */
+  _consRpNums(o.inv).forEach(function(v){
+    if(v > target)
+      warn.push("Invalidasi menyebut Rp" + _consFmt(v) + ", di atas target Rp" + _consFmt(target) + " — pemicu jual di atas target tidak konsisten; invalidasi harga biasanya di bawah harga beli.");
+  });
+  /* 6. Multiples: target = metrik × kelipatan? */
+  if(o.method === "mult" && !isNaN(o.eps) && !isNaN(o.mult) && o.eps > 0 && o.mult > 0){
+    var implied = o.eps * o.mult;
+    if(Math.abs(implied - target) / target > 0.10)
+      warn.push("Multiples dari input terstruktur (EPS Rp" + _consFmt(o.eps) + " × " + o.mult + "x) menghasilkan Rp" + _consFmt(implied) + ", bukan target Rp" + _consFmt(target) + " — periksa metrik, kelipatan, atau target-mu.");
+  }
+  /* 7. DDM: target di bawah nilai dividen tanpa pertumbuhan = terlalu rendah */
+  if(o.method === "ddm" && !isNaN(o.div) && !isNaN(o.req) && o.div > 0 && o.req > 0){
+    var noGrowth = o.div / (o.req / 100);
+    if(target < noGrowth * 0.9)
+      warn.push("Target Rp" + _consFmt(target) + " di bawah nilai dividen tanpa pertumbuhan (Rp" + _consFmt(noGrowth) + " = dividen Rp" + _consFmt(o.div) + " ÷ required return " + o.req + "%) — dengan pertumbuhan, nilainya seharusnya lebih tinggi; periksa dividen atau required return-mu.");
+  }
+  /* 8. input metode di bull case vs kolom terstruktur (lintas field) */
+  var waccBull = _consPctAfter(o.bull, "WACC");
+  if(!isNaN(waccBull) && !isNaN(o.wacc) && Math.abs(waccBull - o.wacc) > 1)
+    warn.push("Bull case menulis WACC " + waccBull + "%, tapi kolom terstruktur diisi " + o.wacc + "% — samakan angkanya.");
+  var payBull = _consPctAfter(o.bull, "payout");
+  if(!isNaN(payBull) && !isNaN(o.payout) && Math.abs(payBull - o.payout) > 5)
+    warn.push("Bull case menulis payout " + payBull + "%, tapi kolom terstruktur diisi " + o.payout + "% — samakan angkanya.");
+  return warn;
+}
+var consWarns = []; /* peringatan G2 untuk sesi ini (tampil di Step 4 + vonis) */
 pitchBtns.forEach(function(btn){
   btn.addEventListener("click", function(){
     pitchBtns.forEach(function(b){b.classList.remove("sel");});
@@ -178,6 +284,13 @@ document.getElementById("t-method").addEventListener("change", function(){
   var m = METHOD_INPUTS[this.value];
   var h = document.getElementById("method-hint");
   if(h) h.textContent = m ? ("Checklist " + m.label + ": " + m.need + ".") : "Pilih metode — checklist input utama muncul di sini.";
+  /* Ronde 8 G2 — tampilkan kolom angka kunci metode yang dipilih. */
+  var show = function(id, on){ var el = document.getElementById(id); if(el) el.style.display = on ? "block" : "none"; };
+  show("inputs-dcf", this.value === "dcf");
+  show("inputs-mult", this.value === "mult");
+  show("inputs-ddm", this.value === "ddm");
+  var none = document.getElementById("inputs-none");
+  if(none) none.style.display = this.value ? "none" : "block";
 });
 
 document.getElementById("to-committee").addEventListener("click", function(){
@@ -200,11 +313,35 @@ document.getElementById("to-committee").addEventListener("click", function(){
   if(!sub.bull){ alert("Bull case butuh ANGKA yang bisa diuji — target/upside % atau perubahan berarah (mis. \"pangsa pasar 18%→22% dalam 3 tahun\" atau \"target Rp2.450, upside 36%\"). Narasi tanpa angka tidak lolos komite."); return; }
   if(!sub.risk){ alert("Risiko butuh DAMPAK TERUKUR per poin — angka PENYEBAB dan angka DAMPAK (mis. \"1. Daya beli turun 10% → target turun ke Rp1.900\"). Seberapa besar dampaknya, dalam angka?"); return; }
   if(!sub.inv){ alert("Invalidasi butuh PEMICU SPESIFIK yang teramati — harga/level/angka (mis. \"FCFF turun ≥20%\" atau \"harga menyentuh Rp1.400\"). \"Bila keadaan memburuk\" bukan pemicu."); return; }
+  /* Ronde 8 G2 — cek konsistensi ANTAR field (peringatan, bukan blokir):
+     dihitung SETELAH semua gerbang lolos; tidak ada return/alert di sini,
+     jadi jawaban yang sudah lolos sebelumnya tetap lolos apa pun hasilnya. */
+  var consIn = function(id){ var el = document.getElementById(id); return el ? parseIDNumber(el.value) : NaN; };
+  consWarns = consistencyWarnings({
+    target: target, mkt: STOCKS[cur].nums[0][1], method: method,
+    bull: bull, risk: risk, inv: inv,
+    fcff: consIn("in-fcff"), wacc: consIn("in-wacc"), g: consIn("in-g"),
+    debt: consIn("in-debt"), shares: consIn("in-shares"),
+    eps: consIn("in-eps"), mult: consIn("in-mult"),
+    div: consIn("in-div"), payout: consIn("in-payout"), req: consIn("in-req")
+  });
+  var cb = document.getElementById("consistency-box");
+  if(cb){
+    cb.innerHTML = consWarns.length === 0
+      ? '<div class="honest" style="margin-bottom:.8rem"><b>Cek konsistensi thesis:</b> ✓ angka-angka thesis selaras (target vs bull case, dampak risiko, invalidasi, dan input metode).</div>'
+      : '<div class="id-kunci" style="margin-bottom:.8rem"><b>Cek konsistensi thesis — ' + consWarns.length + ' peringatan (bukan blokir, skor tidak berubah):</b><br>• ' + consWarns.join("<br>• ") + '</div>';
+  }
   var s = STOCKS[cur], h = "";
   s.comm.forEach(function(cq,i){
     h += '<div class="id-field" style="margin-bottom:.8rem"><label>'+(i+1)+'. '+cq.q+'</label>'
       + '<input id="cq'+i+'" inputmode="decimal" placeholder="mis. 36,1"></div>';
   });
+  /* Ronde 8 G3 — pertanyaan konseptual B setelah Q4 (di luar skor). */
+  if(s.concept){
+    h += '<div class="id-field" style="margin-bottom:.8rem"><label>5. '+s.concept.q+' (konseptual — di luar skor 10)</label>'
+      + '<div class="id-btnrow"><label style="flex:1"><input type="radio" name="cq-concept" value="ya"> Ya</label>'
+      + '<label style="flex:1"><input type="radio" name="cq-concept" value="tidak"> Tidak</label></div></div>';
+  }
   document.getElementById("comm-qs").innerHTML = h;
   show("step-committee");
 });
@@ -258,6 +395,16 @@ document.getElementById("to-verdict").addEventListener("click", function(){
   score += iScore;
   var iLabel = iq.q.indexOf("BATAS BELI")===0 ? "Batas beli" : (iq.q.indexOf("REVERSE-DCF")===0 ? "Reverse-DCF / required growth" : "Invalidasi");
   fb.push("<b>"+iLabel+" ("+iScore+"/2):</b> "+(iOk?"✓":"✗")+" — "+(isNaN(iv)?("Jawaban tidak terbaca: "+ivWarn+" "):"")+iq.why);
+  /* Ronde 8 G2 — peringatan konsistensi ditampilkan kembali di vonis
+     (bukan skor, bukan gerbang): jawaban benar sebelumnya tetap lolos. */
+  fb.push("<b>Cek konsistensi thesis (peringatan, di luar skor):</b> " + (consWarns.length === 0 ? "✓ angka-angka thesis selaras." : "• " + consWarns.join("<br>• ")));
+  /* Ronde 8 G3 — pertanyaan konseptual B (di luar skor 10). */
+  if(s.concept){
+    var picked = document.querySelector('input[name="cq-concept"]:checked');
+    var cAns = picked ? picked.value : null;
+    var cOk = (cAns === s.concept.ans);
+    fb.push("<b>Konseptual — batas beli ≠ pemicu jual (di luar skor 10):</b> " + (cAns === null ? "Tidak dijawab — " : (cOk ? "✓ " : "✗ ")) + s.concept.why);
+  }
   /* Gerbang keputusan: LULUS wajib skor ≥7 DAN keputusan benar. Tanpa gerbang ini,
      keputusan salah + sisa sempurna = 7/10 tetap lolos (review Instinct 2026-11-05). */
   var decOk = (decision === s.key.decision);

@@ -453,6 +453,147 @@ check("N5d skor tetap dihitung dari jawaban aktual",
       "if(picked === Q[i].ans) score++;" in quiz)
 
 # ============================================================
+# GAP RONDE 8 (perintah Septian 2026-11-09 01:53 "klo gap, kerjakan aja")
+# G1 — contoh jurnal Sinar Ritel terisi penuh (I3 §3)
+# G2 — cek konsistensi target vs angka thesis (simulator, peringatan)
+# G3 — pertanyaan konseptual B: batas beli != pemicu jual
+# ============================================================
+# --- G1: contoh jurnal terisi ---
+g1 = re.search(r"Contoh terisi — Sinar Ritel.*?</div>\s*<p>Template kosong", i3, re.S)
+check("G1a contoh jurnal terisi Sinar Ritel hadir di I3 §3", g1 is not None)
+if g1:
+    ex = g1.group(0)
+    check("G1b thesis 1 kalimat (gerai 120→150, margin 12%→14%)",
+          "gerai naik 120→150" in ex and "margin EBIT 12%→14%" in ex)
+    check("G1c target Rp2.062 + beli Rp1.500 + MOS ≈27%",
+          "target Rp2.062" in ex and "beli di Rp1.500" in ex and "MOS ≈27%" in ex)
+    check("G1d invalidasi Rp1.400 + FCFF ≥20% (target ≈Rp1.568)",
+          "Rp1.400" in ex and "FCFF turun ≥20%" in ex and "≈Rp1.568" in ex)
+    check("G1e sizing 10.000 lembar (15% portfolio, risiko Rp1 jt)",
+          "10.000 lembar" in ex and "15% portfolio" in ex and "Rp1 jt" in ex)
+    check("G1f tanggal review konkret (13 April 2026, kuartalan Q1)",
+          "13 April 2026" in ex)
+check("G1g hitung ulang MOS: 562/2062 = 27,26% -> ≈27%",
+      abs(562 / 2062 - 0.27255) < 1e-4)
+check("G1h sizing konsisten §2: 10.000 x 1.500 = Rp15 jt = 15% dari Rp100 jt",
+      10000 * 1500 == 15000000 and abs(15000000 / 100000000 - 0.15) < 1e-9)
+check("G1i template kosong tetap tersedia", "target Rp____" in i3)
+check("G1j contoh tidak mengulang 'batas eksak' (R7 N2 tetap 1x di I3)",
+      i3.count("batas eksak Rp1.874,55") == 1)
+
+# --- G2: cek konsistensi (peringatan, bukan blokir) ---
+fn_cons = extract_fn(sim, "consistencyWarnings")
+fn_cfmt = extract_fn(sim, "_consFmt")
+fn_crp = extract_fn(sim, "_consRpNums")
+fn_cpct = extract_fn(sim, "_consPctAfter")
+check("G2a consistencyWarnings terdefinisi (murni, tanpa DOM)",
+      fn_cons is not None)
+check("G2b helper _consRpNums/_consPctAfter terdefinisi",
+      fn_crp is not None and fn_cpct is not None)
+check("G2c field terstruktur ada di simulator HTML (DCF 5 + mult 2 + DDM 3)",
+      all(x in simhtml for x in ('id="in-fcff"', 'id="in-wacc"', 'id="in-g"',
+      'id="in-debt"', 'id="in-shares"', 'id="in-eps"', 'id="in-mult"',
+      'id="in-div"', 'id="in-payout"', 'id="in-req"'))
+      and all(x in simhtml for x in ('id="inputs-dcf"', 'id="inputs-mult"',
+      'id="inputs-ddm"')))
+check("G2d kotak peringatan ada di Step 4", 'id="consistency-box"' in simhtml)
+check("G2e cek dipanggil di to-committee SETELAH semua gerbang",
+      "consWarns = consistencyWarnings({" in sim
+      and sim.index("consWarns = consistencyWarnings({") > sim.index('if(!sub.inv)'))
+_seg = sim[sim.index("consWarns = consistencyWarnings({"):sim.index('var cb = document.getElementById("consistency-box")')]
+check("G2f peringatan TIDAK memblokir (tanpa alert/return di jalur cek)",
+      "alert(" not in _seg and "return" not in _seg)
+check("G2g gerbang PASS ≥7 + keputusan benar TIDAK berubah",
+      'var verdict = (score>=7 && decOk) ? "LULUS" : "BELUM LULUS";' in sim)
+check("G2h skor tetap 3+2+3+2=10", "score = 0, max = 10" in sim)
+check("G2i vonis menampilkan kembali peringatan konsistensi",
+      "Cek konsistensi thesis (peringatan, di luar skor)" in sim)
+if fn_cons and fn_cfmt and fn_crp and fn_cpct:
+    _src = fn_cfmt + "\n" + fn_crp + "\n" + fn_cpct + "\n" + fn_cons
+    _base = {"target": 2450, "mkt": 1800, "method": "dcf",
+             "bull": "FCFF Rp210 M tumbuh 4% (WACC 9,5%) — target Rp2.450, upside 36%",
+             "risk": "1. Daya beli turun 10% → target Rp1.900; 2. Margin EBIT turun >1,5pp → re-hitung target; 3. Utang naik 50% → WACC naik",
+             "inv": "harga menyentuh Rp1.400",
+             "fcff": 210, "wacc": 9.5, "g": 4, "debt": 600, "shares": 1375,
+             "eps": None, "mult": None, "div": None, "payout": None, "req": None}
+    _nan = float("nan")
+    def _o(**kw):
+        d = dict(_base)
+        d.update(kw)
+        return d
+    _cases = [
+        ("lolos penuh (A benar)", _o(), 0),
+        ("bull Rp salah (Rp3.000)", _o(bull="target Rp3.000, upside 36%"), 1),
+        ("upside salah (50%)",
+         _o(bull="FCFF Rp210 M tumbuh 4% — target Rp2.450, upside 50%"), 1),
+        ("DCF salah (FCFF 100)", _o(fcff=100), 1),
+        ("risiko target >= target awal",
+         _o(risk="1. Daya beli turun 10% → target Rp2.600; 2. x; 3. y"), 1),
+        ("invalidasi di atas target", _o(inv="harga menyentuh Rp2.600"), 1),
+        ("multiples salah (180x10 vs 2450)",
+         _o(method="mult", eps=180, mult=10), 1),
+        ("multiples benar (245x10)", _o(method="mult", eps=245, mult=10), 0),
+        ("DDM target di bawah no-growth",
+         {"target": 800, "mkt": 1800, "method": "ddm",
+          "bull": "Dividen Rp100, payout 45%, required return 10% — target Rp800",
+          "risk": "1. Daya beli turun 10% → target Rp700; 2. x; 3. y",
+          "inv": "harga menyentuh Rp600",
+          "fcff": None, "wacc": None, "g": None, "debt": None, "shares": None,
+          "eps": None, "mult": None, "div": 100, "payout": 45, "req": 10}, 1),
+        ("DDM ok", _o(method="ddm", div=81, req=10), 0),
+        ("WACC bull vs kolom beda",
+         _o(bull="FCFF Rp210 M tumbuh 4% (WACC 12%) — target Rp2.450, upside 36%"), 1),
+        ("kolom kosong semua tetap lolos",
+         _o(fcff=None, wacc=None, g=None, debt=None, shares=None), 0),
+        ("FCFF Rp210 M di bull tidak picu cek harga",
+         _o(bull="FCFF Rp210 M, WACC 9,5%"), 0),
+    ]
+    # None -> NaN di driver JS (JSON null = null; ganti NaN via string)
+    _js_cases = []
+    for _name, _o_dict, _want in _cases:
+        _js_cases.append(_o_dict)
+    _driver_cases = json.dumps(_js_cases).replace("null", "NaN")
+    _driver = _src + "\nvar __out = " + _driver_cases + \
+        ".map(function(a){ return consistencyWarnings(a).length; });\nconsole.log(JSON.stringify(__out));\n"
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False) as f:
+        f.write(_driver)
+        _p = f.name
+    try:
+        _r = subprocess.run(["node", _p], capture_output=True, text=True, timeout=30)
+        _res = json.loads(_r.stdout.strip()) if _r.returncode == 0 else None
+        _err = _r.stderr.strip()[:200]
+    except Exception as e:
+        _res, _err = None, str(e)[:200]
+    finally:
+        Path(_p).unlink(missing_ok=True)
+    if _res is None:
+        check("G2j eksekusi Node consistencyWarnings", False, _err)
+    else:
+        for (_name, _o_dict, _want), _got in zip(_cases, _res):
+            check(f"G2j-{_name}: {_want} peringatan",
+                  _got == _want, f"dapat {_got}")
+
+# --- G3: pertanyaan konseptual B ---
+_b_concept = re.search(r'concept:\s*\{\s*q:\s*"([^"]*)",\s*ans:\s*"([^"]*)",\s*why:\s*"([^"]*)"', sim)
+check("G3a concept B terdefinisi (q + ans + why)", _b_concept is not None)
+if _b_concept:
+    check("G3b pertanyaan: harga di atas Rp2.310, otomatis sinyal jual?",
+          "Rp2.310" in _b_concept.group(1) and "otomatis sinyal jual" in _b_concept.group(1))
+    check("G3c kunci: tidak", _b_concept.group(2) == "tidak")
+    check("G3d why: batas MEMBUKA posisi, bukan pemicu jual",
+          "batas untuk MEMBUKA posisi, bukan pemicu jual" in _b_concept.group(3))
+    check("G3e why: posisi lama tidak otomatis dijual",
+          "tidak otomatis dijual di sini" in _b_concept.group(3))
+check("G3f concept hanya di B (1x repo-wide, kunci Rp2.310 = B)",
+      sim.count("concept:") == 1)
+check("G3g radio Ya/Tidak dirender setelah Q4 (name=cq-concept)",
+      'name="cq-concept"' in sim and 'value="ya"' in sim and 'value="tidak"' in sim)
+check("G3h vonis menampilkan hasil konseptual (di luar skor 10)",
+      "Konseptual — batas beli ≠ pemicu jual (di luar skor 10)" in sim)
+check("G3i Step 4 menyebut pertanyaan konseptual B",
+      "pertanyaan konseptual (batas beli ≠ pemicu jual)" in simhtml)
+
+# ============================================================
 # Sintaks JS + guard R7 bertahan
 # ============================================================
 for js in sorted((ROOT / "js").glob("*.js")):
