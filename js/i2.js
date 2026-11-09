@@ -13,7 +13,7 @@ var ID_QUIZ=[
   opts:["Selalu 30%, angka klasik Graham","Fungsi ketidakpastian — makin tidak pasti, makin besar MOS yang dituntut","Selisih P/E vs rata-rata industri","Diskon 10% dari target price"],
   ans:1,why:"Bisnis stabil cukup 15–20%; siklikal 30–40%; thesis satu-asumsi 40%+ atau jangan beli."},
  {q:"P/E 8x bisa menipu (value trap) bila…",
-  opts:["Perusahaan membayar dividen","Labanya tidak menjadi kas (CFO jauh di bawah laba)","Sahamnya likuid","Industrinya defensif"],
+  opts:["Perusahaan membayar dividen","CFO jauh di bawah laba secara konsisten (perlu ditelusuri)","Sahamnya likuid","Industrinya defensif"],
   ans:1,why:"CFO yang konsisten jauh di bawah laba adalah red flag; telusuri penyebabnya selama beberapa tahun sebelum percaya kelipatan murah."}
 ];
 var ID_GATE="id_gate_i2";

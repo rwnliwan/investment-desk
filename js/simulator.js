@@ -76,7 +76,7 @@ var STOCKS = {
       { q: "CFO rata-rata 3 tahun bila NI 348 dan CFO/NI 40%? (Rp miliar)", ans: 139, tol: 5, why: "348 × 0,4 = 139,2." },
       { q: "Selisih NI − CFO = ? (Rp miliar) — selisih laba dan kas yang perlu ditelusuri", ans: 209, tol: 8, why: "348 − 139 = 209. Ini selisih SATU periode — belum membuktikan kas tidak pernah diterima (bisa perubahan modal kerja/timing). Yang perlu ditelusuri: piutang/persediaan menumpuk atau revenue recognition agresif." },
       { q: "REVERSE-DCF / REQUIRED GROWTH (bagi yang nekat BUY): g berapa agar target = Rp5.000? (%)", ans: 4.6, tol: 0.3, inv: true,
-        why: "g tersirat 4,65% adalah batas impas valuasi — pertumbuhan FCFF 4,65% selamanya yang membuat target = harga Rp5.000. Untuk properti siklikal yang labanya tidak jadi kas, asumsi itu agresif dan tidak didukung bukti (bandingkan: g 3% yang dipakai di DCF; pertumbuhan ekonomi jangka panjang ±5%) — jadi thesis BUY tidak punya margin: PASS. Invalidasi yang bisa diamati: CFO tetap jauh di bawah laba, atau g terealisasi bertahun-tahun di bawah 4,65%." }
+        why: "g tersirat 4,65% adalah batas impas valuasi — pertumbuhan FCFF 4,65% selamanya yang membuat target = harga Rp5.000. Untuk properti siklikal yang CFO-nya hanya 40% dari laba (selisih laba-kas ini wajib ditelusuri sebelum menyimpulkan — I2 §3.1), asumsi itu agresif dan tidak didukung bukti (bandingkan: g 3% yang dipakai di DCF; pertumbuhan ekonomi jangka panjang ±5%) — jadi thesis BUY tidak punya margin: PASS. Invalidasi yang bisa diamati: CFO tetap jauh di bawah laba, atau g terealisasi bertahun-tahun di bawah 4,65%." }
     ]
   }
 };
@@ -133,21 +133,37 @@ var pitchBtns = document.querySelectorAll("#pitch-btns .id-opt");
 function substanceChecks(bull, risk, inv){
   var hasNum = function(s){ return /\d/.test(s); };
   var hasUnit = function(s){ return /(%|\bRp|miliar|juta|poin|persen|kuartal|→|pp(?![a-z])|bps(?![a-z])|x(?![a-z0-9]))/i.test(s); };
+  /* Ronde 9 V-M2 — format rumah "Rp2.450"/"Rp210" (tanpa spasi) adalah
+     format yang diajarkan modul sendiri: /\bRp\b/ menuntut word-boundary
+     setelah "Rp" dan menolaknya. Pakai /\bRp\s*\d/ (Rp langsung diikuti
+     angka, spasi opsional). */
   var bullOk = hasNum(bull) && hasUnit(bull) &&
-    (/\d\s*→\s*\d/.test(bull) || /\bRp\b/i.test(bull) ||
+    (/\d\s*→\s*\d/.test(bull) || /\bRp\s*\d/i.test(bull) ||
      (/(target|upside|naik|turun|tumbuh|margin|pangsa|pendapatan|penjualan)\b/i.test(bull) && /%/.test(bull)));
-  var riskNums = (risk.match(/\d[\d.,]*/g) || []).length;
-  var riskOk = riskNums >= 2 && hasUnit(risk) &&
-    (/→/.test(risk) || /\bRp\b/i.test(risk) || /target/i.test(risk));
+  /* Ronde 9 V-S4 — nomor daftar ("1."/"2."/"3." di awal poin) dan
+     sitasi ("I3", "§4") BUKAN angka substantif: buang dulu sebelum
+     menghitung. "→" saja bukan satuan: syaratkan minimal satu angka
+     ber-satuan dampak (Rp/%/pp/target) DAN satu penghubung sebab-dampak
+     (→/target/kata arah/tanda −/+), supaya tiga harga tanpa
+     sebab-dampak ("Rp1.900 / Rp2.500 / Rp3.000") tetap ditolak. */
+  var riskCore = (risk || "").replace(/(^|[;\n])\s*\d+\s*[.)]\s*/g, " ")
+    .replace(/\bI[1234]\b/g, " ").replace(/§\s*\d+/g, " ");
+  var riskNums = (riskCore.match(/\d[\d.,]*/g) || []).length;
+  var riskImpact = /(Rp\s*\d|\d[\d.,]*\s*(%|pp|persen|poin|bps)|target[^0-9]{0,10}Rp?\s*\d)/i.test(riskCore);
+  var riskLink = /(→|target|turun|naik|jatuh|menyusut|melemah|menguat|−|\+)/i.test(riskCore);
+  var riskOk = riskNums >= 2 && riskImpact && riskLink;
   var invOk = hasNum(inv) && hasUnit(inv) &&
     /(turun|naik|menyentuh|menembus|jatuh|sentuh|di\s*bawah|di\s*atas|≤|≥|>=|<=|kurang\s*dari|lebih\s*dari)/i.test(inv);
   return { bull: bullOk, risk: riskOk, inv: invOk };
 }
 /* Ronde 8 S5 — I1 §1 mensyaratkan 3 risiko terbesar, masing-masing
    dengan dampak ke target price. Simulator menguji ketiganya: textarea
-   risiko wajib memuat 3 poin bernomor (1./2./3. atau 1)/2)/3)). */
+   risiko wajib memuat 3 poin bernomor (1./2./3. atau 1)/2)/3)).
+   Ronde 9 V-S4 — penanda bernomor harus "N."/"N)" yang diikuti spasi +
+   teks (bukan "N.500" harga ribuan, bukan "Rp1.900"): tiga harga
+   "Rp1.900 / 2.500 / Rp3.000" tidak lagi lolos. */
 function hasThreeNumberedRisks(s){
-  return /1\s*[.)]/.test(s) && /2\s*[.)]/.test(s) && /3\s*[.)]/.test(s);
+  return /(?:^|[\s;])1[.)]\s+\S/.test(s) && /(?:^|[\s;])2[.)]\s+\S/.test(s) && /(?:^|[\s;])3[.)]\s+\S/.test(s);
 }
 /* Ronde 8 S6 — metode valuasi wajib terikat input utamanya (checklist
    per metode, I2). Memilih DDM lalu menulis narasi DCF = tidak lolos:
@@ -195,7 +211,10 @@ function _consRpNums(s){
   var out = [], m, re = /Rp\s*([0-9][0-9.,]*)\s*(M\b|miliar|juta)?/g;
   while((m = re.exec(s || "")) !== null){
     if(m[2]) continue;
-    if(/(dividen|eps|fcff|payout)\s*$/i.test((s || "").slice(Math.max(0, m.index - 20), m.index))) continue;
+    /* Ronde 9 V-N6 — "dividen per saham Rp81" / "EPS per saham Rp180":
+       kata kunci boleh berjarak beberapa kata dari Rp ("per saham"),
+       bukan hanya spasi langsung. */
+    if(/(dividen|eps|fcff|payout)[^.]{0,25}$/i.test((s || "").slice(Math.max(0, m.index - 30), m.index))) continue;
     var v = m[1];
     var n = (v.indexOf(",") >= 0) ? parseFloat(v.replace(/\./g, "").replace(",", ".")) : parseFloat(v.replace(/\./g, ""));
     if(!isNaN(n)) out.push(n);
@@ -240,6 +259,9 @@ function consistencyWarnings(o){
   /* 4. dampak risiko: target setelah risiko tidak boleh ≥ target awal */
   var rm = /target[^0-9]{0,25}Rp\s*([0-9][0-9.,]*)/gi, m2;
   while((m2 = rm.exec(o.risk || "")) !== null){
+    /* Ronde 9 V-N5 — "target awal Rp2.450" adalah target AWAL, bukan
+       dampak risiko: lewati frasa target awal/semula/sebelumnya. */
+    if(/awal|semula|sebelumnya/i.test(m2[0])) continue;
     var rv = m2[1];
     var rn = (rv.indexOf(",") >= 0) ? parseFloat(rv.replace(/\./g, "").replace(",", ".")) : parseFloat(rv.replace(/\./g, ""));
     if(!isNaN(rn) && rn >= target)

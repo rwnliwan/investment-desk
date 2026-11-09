@@ -11,7 +11,7 @@ var ID_QUIZ=[
   ans:2,why:"Risiko generik = belum mikir. Risiko benar: 'daya beli turun → same-store sales −8% → asumsi FCFF −10% → target turun ke ≈Rp1.815' — skenario yang sama dengan risiko (a) di thesis contoh I1 §2."},
  {q:"Dalam thesis testing 3 lensa, pertanyaan lensa FORENSIK adalah…",
   opts:["Bisakah perusahaan bangkrut sebelum thesis terbukti?","Apakah labanya jadi kas (CFO vs laba)?","Apa yang harus terjadi agar thesis benar?","Berapa target price-nya?"],
-  ans:1,why:"Lensa forensik = kualitas laba: apakah laba berubah menjadi kas. Value trap paling umum = laba tanpa kas."},
+  ans:1,why:"Lensa forensik = kualitas laba: apakah laba berubah menjadi kas. Value trap paling umum = laba tanpa kas, kecuali dijelaskan oleh waktu kas atau perubahan modal kerja — selisih itu wajib ditelusuri dulu (I2 §3.1)."},
  {q:"Thesis tanpa harga beli (\"beli di bawah RpX\") adalah…",
   opts:["Tetap valid selama analisisnya dalam","Opini, bukan keputusan","Cukup untuk komite","Strategi long-term yang sah"],
   ans:1,why:"Keputusan investasi = thesis + harga. Tanpa harga beli tidak ada keputusan — hanya opini."}
